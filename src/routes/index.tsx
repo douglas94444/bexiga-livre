@@ -17,6 +17,14 @@ const title = "Protocolo Bexiga Livre™ | Programa educativo para infecção ur
 const description =
   "Programa educativo para mulheres com infecções urinárias repetidas: plano preventivo, checklists e o Método L.I.V.R.E. para voltar a dormir, viajar e sair sem medo.";
 
+const metaPixelScript = `(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})
+(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1511388837456671');
+fbq('track', 'PageView');`;
+
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
@@ -31,6 +39,10 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "/" }],
     scripts: [
+      {
+        type: "text/javascript",
+        children: metaPixelScript,
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
