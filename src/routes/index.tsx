@@ -1,24 +1,83 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero } from "@/components/landing/Hero";
+import { BeforeAfter } from "@/components/landing/BeforeAfter";
+import { FearCards } from "@/components/landing/FearCards";
+import { TriedEverything } from "@/components/landing/TriedEverything";
+import { ProtocolIntro } from "@/components/landing/ProtocolIntro";
+import { MethodLivre } from "@/components/landing/MethodLivre";
+import { Deliverables } from "@/components/landing/Deliverables";
+import { FutureRoutine } from "@/components/landing/FutureRoutine";
+import { Comparison } from "@/components/landing/Comparison";
+import { Faq } from "@/components/landing/Faq";
+import { Offer } from "@/components/landing/Offer";
+import { FinalCta, LandingFooter } from "@/components/landing/FinalCta";
+import { faqItems } from "@/components/landing/faq-data";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Protocolo Bexiga Livre™ | Programa educativo para infecção urinária de repetição";
+const description =
+  "Programa educativo para mulheres com infecções urinárias repetidas: plano preventivo, checklists e o Método L.I.V.R.E. para voltar a dormir, viajar e sair sem medo.";
+
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "product" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: "Protocolo Bexiga Livre™",
+          description,
+          offers: {
+            "@type": "Offer",
+            price: "27.00",
+            priceCurrency: "BRL",
+            availability: "https://schema.org/InStock",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }),
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="bg-background">
+      <Hero />
+      <BeforeAfter />
+      <FearCards />
+      <TriedEverything />
+      <ProtocolIntro />
+      <MethodLivre />
+      <Deliverables />
+      <FutureRoutine />
+      <Comparison />
+      <Faq />
+      <Offer />
+      <FinalCta />
+      <LandingFooter />
+    </main>
   );
 }
