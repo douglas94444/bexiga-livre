@@ -1,5 +1,6 @@
 import { PRODUCT_NAME } from "@/components/landing/offer-data";
 import { plans, type PlanId } from "@/components/landing-v2/v2-offer-data";
+import type { PayMethod } from "@/lib/mercadopago";
 
 export const META_PIXEL_ID = "1511388837456671";
 
@@ -12,10 +13,24 @@ declare global {
   }
 }
 
-export type MetaPixelParams = Record<
-  string,
-  string | number | boolean | string[] | Record<string, string | number>[]
->;
+/** Eventos padrão usados no funil (Pixel). */
+export type MetaStandardEvent =
+  | "PageView"
+  | "ViewContent"
+  | "AddToCart"
+  | "InitiateCheckout"
+  | "AddPaymentInfo"
+  | "Purchase";
+
+export type MetaPixelParams = {
+  content_name?: string;
+  content_ids?: string[];
+  content_type?: "product" | "product_group";
+  value?: number;
+  currency?: "BRL";
+  num_items?: number;
+  payment_method?: PayMethod;
+};
 
 export type MetaUserInput = {
   email?: string;
@@ -29,7 +44,7 @@ export type MetaAdvancedMatching = {
   ph?: string;
   fn?: string;
   ln?: string;
-  country: string;
+  country: "br";
   external_id?: string;
 };
 
@@ -39,7 +54,7 @@ export function normalizeEmail(email: string): string {
 
 /** Telefone só dígitos, com DDI 55 (BR) se faltar. */
 export function normalizePhone(phone: string): string {
-  let digits = phone.replace(/\D/g, "");
+  const digits = phone.replace(/\D/g, "");
   if (!digits) return "";
   if (digits.startsWith("55") && digits.length >= 12) return digits;
   if (digits.length >= 10 && digits.length <= 11) return `55${digits}`;
@@ -62,6 +77,22 @@ export function splitFullName(name: string): { fn?: string; ln?: string } {
   if (parts.length === 0) return {};
   if (parts.length === 1) return { fn: parts[0] };
   return { fn: parts[0], ln: parts.slice(1).join(" ") };
+}
+
+export function hasMatchableUserData(input: MetaUserInput): boolean {
+  return Boolean(input.email?.trim() || input.phone?.trim());
+}
+
+export function isMetaUserInput(value: unknown): value is MetaUserInput {
+  if (!value || typeof value !== "object") return false;
+  const obj = value as Record<string, unknown>;
+  const keys = ["email", "phone", "name"] as const;
+  for (const key of keys) {
+    if (key in obj && obj[key] !== undefined && typeof obj[key] !== "string") {
+      return false;
+    }
+  }
+  return keys.some((key) => typeof obj[key] === "string" && obj[key].trim().length > 0);
 }
 
 export function buildAdvancedMatching(input: MetaUserInput): MetaAdvancedMatching {
@@ -100,7 +131,8 @@ export function loadMetaUserData(): MetaUserInput | null {
   try {
     const raw = sessionStorage.getItem(USER_DATA_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as MetaUserInput;
+    const parsed: unknown = JSON.parse(raw);
+    return isMetaUserInput(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -134,13 +166,14 @@ export function createEventId(): string {
 /** Atualiza Advanced Matching no Pixel (re-init com user_data). */
 export function setMetaUserData(input: MetaUserInput) {
   if (typeof window === "undefined" || typeof window.fbq !== "function") return;
-  const matching = buildAdvancedMatching(input);
   persistMetaUserData(input);
+  if (!hasMatchableUserData(input)) return;
+  const matching = buildAdvancedMatching(input);
   window.fbq("init", META_PIXEL_ID, matching);
 }
 
 export function trackMetaEvent(
-  event: string,
+  event: MetaStandardEvent,
   params?: MetaPixelParams,
   options?: { eventID?: string },
 ) {
@@ -208,7 +241,7 @@ export function trackAddPaymentInfo(
     content_name: string;
     content_ids: string[];
     value: number;
-    payment_method?: string;
+    payment_method?: PayMethod;
   },
   options?: { eventID?: string },
 ) {

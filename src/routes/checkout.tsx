@@ -13,12 +13,18 @@ import {
   formatBRL,
   parseBumpIds,
   serializeBumpIds,
+  type BumpsSearchParam,
   type CheckoutBumpId,
 } from "@/components/landing/offer-data";
 import { plans, type PlanId } from "@/components/landing-v2/v2-offer-data";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { startMercadoPagoCheckout } from "@/lib/mercadopago";
+import {
+  digitsOnly,
+  parseCheckoutForm,
+  type CheckoutFormErrors,
+} from "@/lib/checkout-schema";
+import { startMercadoPagoCheckout, type PayMethod } from "@/lib/mercadopago";
 import {
   createEventId,
   persistPurchaseEventId,
@@ -30,13 +36,12 @@ import {
   trackInitiateCheckout,
 } from "@/lib/meta-pixel";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 type CheckoutSearch = {
   plan: PlanId;
-  bumps: string;
+  bumps: BumpsSearchParam;
 };
-
-type PayMethod = "pix" | "card";
 
 function formatCpf(value: string) {
   const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -88,6 +93,8 @@ function CheckoutPage() {
   const [selectedBumps, setSelectedBumps] = useState<CheckoutBumpId[]>(initialIds);
   const [payMethod, setPayMethod] = useState<PayMethod>("pix");
   const [submitting, setSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
+  const isDev = import.meta.env.DEV;
 
   useEffect(() => {
     setSelectedBumps(initialIds);
@@ -149,13 +156,13 @@ function CheckoutPage() {
   }
 
   function goObrigado() {
+    if (!import.meta.env.DEV) return;
     fireAddPaymentInfo();
     void navigate({
       to: "/obrigado",
       search: {
         plan,
         bumps: serializeBumpIds(selectedBumps),
-        amount: String(total),
       },
     });
   }
@@ -164,21 +171,42 @@ function CheckoutPage() {
     event.preventDefault();
     if (submitting) return;
 
-    const cpfDigits = cpf.replace(/\D/g, "");
-    if (cpfDigits.length !== 11) return;
+    const parsed = parseCheckoutForm({
+      name,
+      email,
+      cpf,
+      phone,
+      plan,
+      bumpIds: selectedBumps,
+      payMethod,
+    });
 
+    if (!parsed.ok) {
+      setFieldErrors(parsed.errors);
+      const first =
+        parsed.errors.name ??
+        parsed.errors.email ??
+        parsed.errors.cpf ??
+        parsed.errors.phone ??
+        parsed.errors.form ??
+        "Revise os dados do formulário";
+      toast.error(first);
+      return;
+    }
+
+    setFieldErrors({});
     setSubmitting(true);
     fireAddPaymentInfo();
 
     try {
       await startMercadoPagoCheckout({
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        document: cpfDigits,
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        document: digitsOnly(parsed.data.cpf),
         amount: total,
-        bumpIds: selectedBumps,
-        payMethod,
+        bumpIds: parsed.data.bumpIds,
+        payMethod: parsed.data.payMethod,
       });
     } finally {
       setSubmitting(false);
@@ -216,10 +244,17 @@ function CheckoutPage() {
                     required
                     autoComplete="name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
+                    aria-invalid={Boolean(fieldErrors.name)}
                     className="h-12 rounded-xl text-base"
                     placeholder="Como prefere ser chamada"
                   />
+                  {fieldErrors.name ? (
+                    <p className="text-sm text-destructive">{fieldErrors.name}</p>
+                  ) : null}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="checkout-email">E-mail</Label>
@@ -230,10 +265,17 @@ function CheckoutPage() {
                     required
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    aria-invalid={Boolean(fieldErrors.email)}
                     className="h-12 rounded-xl text-base"
                     placeholder="Para receber o acesso"
                   />
+                  {fieldErrors.email ? (
+                    <p className="text-sm text-destructive">{fieldErrors.email}</p>
+                  ) : null}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="checkout-cpf">CPF</Label>
@@ -244,11 +286,18 @@ function CheckoutPage() {
                     inputMode="numeric"
                     autoComplete="off"
                     value={cpf}
-                    onChange={(e) => setCpf(formatCpf(e.target.value))}
+                    onChange={(e) => {
+                      setCpf(formatCpf(e.target.value));
+                      setFieldErrors((prev) => ({ ...prev, cpf: undefined }));
+                    }}
+                    aria-invalid={Boolean(fieldErrors.cpf)}
                     className="h-12 rounded-xl text-base"
                     placeholder="000.000.000-00"
                     minLength={14}
                   />
+                  {fieldErrors.cpf ? (
+                    <p className="text-sm text-destructive">{fieldErrors.cpf}</p>
+                  ) : null}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="checkout-phone">Celular / WhatsApp</Label>
@@ -260,10 +309,17 @@ function CheckoutPage() {
                     autoComplete="tel"
                     inputMode="tel"
                     value={phone}
-                    onChange={(e) => setPhone(formatPhone(e.target.value))}
+                    onChange={(e) => {
+                      setPhone(formatPhone(e.target.value));
+                      setFieldErrors((prev) => ({ ...prev, phone: undefined }));
+                    }}
+                    aria-invalid={Boolean(fieldErrors.phone)}
                     className="h-12 rounded-xl text-base"
                     placeholder="(00) 00000-0000"
                   />
+                  {fieldErrors.phone ? (
+                    <p className="text-sm text-destructive">{fieldErrors.phone}</p>
+                  ) : null}
                 </div>
               </div>
             </section>
@@ -432,16 +488,20 @@ function CheckoutPage() {
                 {submitting ? "Preparando pagamento…" : "Finalizar pagamento"}
               </button>
 
-              <button
-                type="button"
-                onClick={goObrigado}
-                className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-border bg-background px-6 text-sm font-medium tracking-tight text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Simular compra e baixar
-              </button>
-              <p className="text-center text-xs text-muted-foreground">
-                Use este botão enquanto o Mercado Pago não está integrado.
-              </p>
+              {isDev ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={goObrigado}
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-border bg-background px-6 text-sm font-medium tracking-tight text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Simular compra e baixar (dev)
+                  </button>
+                  <p className="text-center text-xs text-muted-foreground">
+                    Disponível só em desenvolvimento — bypass do gateway.
+                  </p>
+                </>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">

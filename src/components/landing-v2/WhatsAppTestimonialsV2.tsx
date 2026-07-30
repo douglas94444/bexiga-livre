@@ -15,7 +15,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { heroCopy, whatsappTestimonials } from "./v2-offer-data";
-import { V2Cta, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Cta, V2Section, V2Title } from "./shared";
 
 const avatars = {
   marcia: avatarMarcia,
@@ -103,7 +103,7 @@ function WhatsAppChat({
   );
 }
 
-export function WhatsAppTestimonialsV2({ onCta }: { onCta: () => void }) {
+export function WhatsAppTestimonialsV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="muted">
       <V2Title>Veja o que estão dizendo das receitas:</V2Title>

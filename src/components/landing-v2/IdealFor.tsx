@@ -1,11 +1,11 @@
-ï»¿import { Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { idealForItems } from "./v2-offer-data";
-import { V2Card, V2Cta, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Card, V2Cta, V2Section, V2Title } from "./shared";
 
-export function IdealFor({ onCta }: { onCta: () => void }) {
+export function IdealFor({ onCta }: CtaHandlerProps) {
   return (
     <V2Section>
-      <V2Title>Este protocolo Ã© perfeito para vocÃª que:</V2Title>
+      <V2Title>Este protocolo é perfeito para você que:</V2Title>
       <ul className="mx-auto mt-10 max-w-2xl space-y-4">
         {idealForItems.map((item) => (
           <V2Card

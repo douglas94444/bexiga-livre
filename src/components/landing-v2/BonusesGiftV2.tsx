@@ -10,11 +10,11 @@ import {
   formatBRL,
   heroCopy,
 } from "./v2-offer-data";
-import { V2Accent, V2Card, V2Cta, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Card, V2Cta, V2Section, V2Title } from "./shared";
 
 const bonusMockups = [mockupAlimentar, mockupSos, mockupViagem, mockupNoite];
 
-export function BonusesGiftV2({ onCta }: { onCta: () => void }) {
+export function BonusesGiftV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="tint">
       <div className="mx-auto max-w-3xl text-center">

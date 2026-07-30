@@ -5,15 +5,40 @@ import { cn } from "@/lib/utils";
 
 export const CHECKOUT_URL = "/checkout";
 
-export function Reveal({
-  children,
-  delay = 0,
-  className,
-}: {
+/**
+ * Convenção de tipagem (app): preferir `type` no código de produto.
+ * `interface` fica para shadcn (`components/ui`) e declaration merging (`Window`).
+ */
+export type RevealProps = {
   children: ReactNode;
   delay?: number;
   className?: string;
-}) {
+};
+
+export type SectionProps = {
+  id?: string;
+  children: ReactNode;
+  className?: string;
+  tone?: "white" | "muted" | "tint";
+};
+
+export type SectionTitleProps = {
+  children: ReactNode;
+  align?: "center" | "left";
+};
+
+export type SectionLeadProps = {
+  children: ReactNode;
+  align?: "center" | "left";
+};
+
+export type CtaButtonProps = {
+  children: ReactNode;
+  className?: string;
+  href?: string;
+};
+
+export function Reveal({ children, delay = 0, className }: RevealProps) {
   const reduced = useReducedMotion();
 
   if (reduced) return <div className={className}>{children}</div>;
@@ -36,12 +61,7 @@ export function Section({
   children,
   className,
   tone = "white",
-}: {
-  id?: string;
-  children: ReactNode;
-  className?: string;
-  tone?: "white" | "muted" | "tint";
-}) {
+}: SectionProps) {
   return (
     <section
       id={id}
@@ -60,10 +80,7 @@ export function Section({
 export function SectionTitle({
   children,
   align = "center",
-}: {
-  children: ReactNode;
-  align?: "center" | "left";
-}) {
+}: SectionTitleProps) {
   return (
     <h2
       className={cn(
@@ -79,10 +96,7 @@ export function SectionTitle({
 export function SectionLead({
   children,
   align = "center",
-}: {
-  children: ReactNode;
-  align?: "center" | "left";
-}) {
+}: SectionLeadProps) {
   return (
     <p
       className={cn(
@@ -102,11 +116,7 @@ export function CtaButton({
   children,
   className,
   href = CHECKOUT_URL,
-}: {
-  children: ReactNode;
-  className?: string;
-  href?: string;
-}) {
+}: CtaButtonProps) {
   const classes = cn(ctaClassName, className);
   const isInternal = href.startsWith("/") && !href.startsWith("//");
 

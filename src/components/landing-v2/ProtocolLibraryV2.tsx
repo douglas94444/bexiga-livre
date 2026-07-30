@@ -22,7 +22,7 @@ import {
   protocolLibraryCopy,
   protocolLibraryItems,
 } from "./v2-offer-data";
-import { V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
 
 const iconMap: Record<(typeof protocolLibraryItems)[number]["icon"], LucideIcon> =
   {
@@ -43,7 +43,7 @@ const iconMap: Record<(typeof protocolLibraryItems)[number]["icon"], LucideIcon>
     repeat: Repeat,
   };
 
-export function ProtocolLibraryV2({ onCta }: { onCta: () => void }) {
+export function ProtocolLibraryV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section>
       <V2Title>

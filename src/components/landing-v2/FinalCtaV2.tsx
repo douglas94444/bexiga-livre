@@ -1,8 +1,8 @@
-ï»¿import { Lock, ShieldCheck, Zap } from "lucide-react";
+import { Lock, ShieldCheck, Zap } from "lucide-react";
 import { finalCopy } from "./v2-offer-data";
-import { V2Accent, V2Cta, V2Section } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Cta, V2Section } from "./shared";
 
-export function FinalCtaV2({ onCta }: { onCta: () => void }) {
+export function FinalCtaV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="dark">
       <div className="mx-auto max-w-2xl text-center">
@@ -40,14 +40,14 @@ export function FooterV2() {
     <footer className="border-t border-border bg-background px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-2xl text-center">
         <p className="font-display text-lg font-semibold tracking-tight">
-          Protocolo Bexiga Blindadaâ„¢
+          Protocolo Bexiga Blindada™
         </p>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          Este material Ã© educativo e nÃ£o substitui avaliaÃ§Ã£o, diagnÃ³stico ou
-          tratamento mÃ©dico. Resultados podem variar de pessoa para pessoa.
+          Este material é educativo e não substitui avaliação, diagnóstico ou
+          tratamento médico. Resultados podem variar de pessoa para pessoa.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
-          Â© {new Date().getFullYear()} Protocolo Bexiga Blindadaâ„¢
+          © {new Date().getFullYear()} Protocolo Bexiga Blindada™
         </p>
       </div>
     </footer>

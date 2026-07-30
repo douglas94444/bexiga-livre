@@ -5,6 +5,51 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/utils";
+import type { PlanId } from "./v2-offer-data";
+
+/**
+ * Convenção de tipagem (app): preferir `type` no código de produto.
+ * `interface` fica para shadcn (`components/ui`) e declaration merging (`Window`).
+ */
+export type CtaHandlerProps = { onCta: () => void };
+
+export type PlanSelectProps = { onSelect: (plan: PlanId) => void };
+
+export type V2SectionProps = {
+  id?: string;
+  children: ReactNode;
+  className?: string;
+  tone?: "white" | "muted" | "tint" | "dark";
+  reveal?: boolean;
+};
+
+export type V2TitleProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export type V2AccentProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export type V2LeadProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export type V2CardProps = {
+  children: ReactNode;
+  className?: string;
+  as?: "div" | "article" | "li";
+};
+
+export type V2CtaProps = {
+  children: ReactNode;
+  onClick?: () => void;
+  className?: string;
+  type?: "button" | "submit";
+};
 
 export function V2Section({
   id,
@@ -12,13 +57,7 @@ export function V2Section({
   className,
   tone = "white",
   reveal = true,
-}: {
-  id?: string;
-  children: ReactNode;
-  className?: string;
-  tone?: "white" | "muted" | "tint" | "dark";
-  reveal?: boolean;
-}) {
+}: V2SectionProps) {
   return (
     <section
       id={id}
@@ -79,13 +118,7 @@ function V2Reveal({ children }: { children: ReactNode }) {
   );
 }
 
-export function V2Title({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function V2Title({ children, className }: V2TitleProps) {
   return (
     <h2
       className={cn(
@@ -98,23 +131,11 @@ export function V2Title({
   );
 }
 
-export function V2Accent({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function V2Accent({ children, className }: V2AccentProps) {
   return <span className={cn("text-star", className)}>{children}</span>;
 }
 
-export function V2Lead({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function V2Lead({ children, className }: V2LeadProps) {
   return (
     <p
       className={cn(
@@ -127,15 +148,7 @@ export function V2Lead({
   );
 }
 
-export function V2Card({
-  children,
-  className,
-  as: Tag = "div",
-}: {
-  children: ReactNode;
-  className?: string;
-  as?: "div" | "article" | "li";
-}) {
+export function V2Card({ children, className, as: Tag = "div" }: V2CardProps) {
   return (
     <Tag
       className={cn(
@@ -153,12 +166,7 @@ export function V2Cta({
   onClick,
   className,
   type = "button",
-}: {
-  children: ReactNode;
-  onClick?: () => void;
-  className?: string;
-  type?: "button" | "submit";
-}) {
+}: V2CtaProps) {
   return (
     <button
       type={type}

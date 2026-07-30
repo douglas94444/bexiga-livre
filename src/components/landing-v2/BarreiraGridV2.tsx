@@ -1,8 +1,8 @@
 import { Lock } from "lucide-react";
 import { barreiras, heroCopy } from "./v2-offer-data";
-import { V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
 
-export function BarreiraGridV2({ onCta }: { onCta: () => void }) {
+export function BarreiraGridV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="muted">
       <V2Title>Método B.A.R.R.E.I.R.A™ — o sistema por trás do protocolo</V2Title>

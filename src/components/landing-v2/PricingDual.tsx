@@ -15,9 +15,8 @@ import {
   bonuses,
   formatBRL,
   plans,
-  type PlanId,
 } from "./v2-offer-data";
-import { V2Cta, V2Section, V2Title } from "./shared";
+import { V2Cta, V2Section, V2Title, type PlanSelectProps } from "./shared";
 import { cn } from "@/lib/utils";
 
 const afterIcons = [CreditCard, Download, ListChecks];
@@ -65,11 +64,7 @@ function PriceBlock({
   );
 }
 
-export function PricingDual({
-  onSelect,
-}: {
-  onSelect: (plan: PlanId) => void;
-}) {
+export function PricingDual({ onSelect }: PlanSelectProps) {
   return (
     <V2Section id="precos" tone="dark" className="bg-brand">
       <V2Title className="text-primary-foreground">

@@ -8,6 +8,7 @@ import {
   mainDeliverables,
   parseBumpIds,
   serializeBumpIds,
+  type BumpsSearchParam,
 } from "@/components/landing/offer-data";
 import {
   loadMetaUserData,
@@ -17,18 +18,17 @@ import {
   setMetaUserData,
   trackPurchaseOnce,
 } from "@/lib/meta-pixel";
+import { planTotal, type PlanId } from "@/components/landing-v2/v2-offer-data";
 
 type ObrigadoSearch = {
-  plan: "basico" | "completo";
-  bumps: string;
-  amount?: string;
+  plan: PlanId;
+  bumps: BumpsSearchParam;
 };
 
 export const Route = createFileRoute("/obrigado")({
   validateSearch: (search: Record<string, unknown>): ObrigadoSearch => ({
     plan: search.plan === "basico" ? "basico" : "completo",
     bumps: serializeBumpIds(parseBumpIds(search.bumps ?? search.bump)),
-    amount: typeof search.amount === "string" ? search.amount : undefined,
   }),
   component: ObrigadoPage,
   head: () => ({
@@ -45,11 +45,12 @@ export const Route = createFileRoute("/obrigado")({
 });
 
 function ObrigadoPage() {
-  const { plan, bumps: bumpsParam, amount } = Route.useSearch();
+  const { plan, bumps: bumpsParam } = Route.useSearch();
   const bumpIds = useMemo(() => parseBumpIds(bumpsParam), [bumpsParam]);
   const selectedBumps = checkoutBumps.filter((b) => bumpIds.includes(b.id));
   const showFull = plan === "completo";
-  const purchaseValue = amount ? Number(amount) : showFull ? 27 : 10;
+  /** Valor do pedido recalculado — nunca confiar em ?amount= da URL. */
+  const purchaseValue = planTotal(plan, bumpIds);
 
   useEffect(() => {
     const value = Number.isFinite(purchaseValue) ? purchaseValue : 27;
@@ -127,7 +128,7 @@ function ObrigadoPage() {
             {selectedBumps.length > 0
               ? ` + ${selectedBumps.map((b) => b.title).join(", ")}`
               : ""}
-            {amount ? ` · ${formatBRL(Number(amount) || 0)}` : ""}
+            {` · ${formatBRL(purchaseValue)}`}
           </p>
 
           <div className="mt-6">

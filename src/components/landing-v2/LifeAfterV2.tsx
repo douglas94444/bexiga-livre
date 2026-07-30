@@ -7,7 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { heroCopy, lifeAfterCopy, lifeAfterItems } from "./v2-offer-data";
-import { V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
 
 const iconMap: Record<(typeof lifeAfterItems)[number]["icon"], LucideIcon> = {
   plane: Plane,
@@ -16,7 +16,7 @@ const iconMap: Record<(typeof lifeAfterItems)[number]["icon"], LucideIcon> = {
   listChecks: ListChecks,
 };
 
-export function LifeAfterV2({ onCta }: { onCta: () => void }) {
+export function LifeAfterV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section>
       <V2Title>

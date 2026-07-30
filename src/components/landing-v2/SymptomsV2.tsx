@@ -4,11 +4,11 @@ import medo from "@/assets/sintoma-medo.jpg";
 import bexigaCheia from "@/assets/sintoma-bexiga-cheia.jpg";
 import recorrente from "@/assets/sintoma-recorrente.jpg";
 import { heroCopy, symptomItems } from "./v2-offer-data";
-import { V2Cta, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Cta, V2Section, V2Title } from "./shared";
 
 const images = [ardencia, medo, bexigaCheia, recorrente];
 
-export function SymptomsV2({ onCta }: { onCta: () => void }) {
+export function SymptomsV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section>
       <V2Title>Se você sente…</V2Title>

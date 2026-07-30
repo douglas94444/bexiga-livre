@@ -84,6 +84,15 @@ export const bonusTotalValue = bonuses.reduce((sum, item) => sum + item.value, 0
 
 export type CheckoutBumpId = "intimidade" | "calendario" | "cranberry";
 
+const CHECKOUT_BUMP_IDS = ["intimidade", "calendario", "cranberry"] as const satisfies readonly CheckoutBumpId[];
+
+export function isCheckoutBumpId(value: string): value is CheckoutBumpId {
+  return (CHECKOUT_BUMP_IDS as readonly string[]).includes(value);
+}
+
+/** CSV serializado de CheckoutBumpId (ex.: "intimidade,calendario"). */
+export type BumpsSearchParam = string;
+
 export const checkoutBumps: readonly {
   id: CheckoutBumpId;
   emoji: string;
@@ -132,9 +141,6 @@ export const checkoutBumps: readonly {
 ] as const;
 
 export function parseBumpIds(raw: unknown): CheckoutBumpId[] {
-  const allowed = new Set<CheckoutBumpId>(
-    checkoutBumps.map((b) => b.id),
-  );
   const str =
     typeof raw === "string"
       ? raw
@@ -144,8 +150,8 @@ export function parseBumpIds(raw: unknown): CheckoutBumpId[] {
   if (!str.trim()) return [];
   const seen = new Set<CheckoutBumpId>();
   for (const part of str.split(",")) {
-    const id = part.trim() as CheckoutBumpId;
-    if (allowed.has(id)) seen.add(id);
+    const id = part.trim();
+    if (isCheckoutBumpId(id)) seen.add(id);
   }
   return [...seen];
 }
@@ -156,8 +162,17 @@ export function bumpsTotal(ids: readonly CheckoutBumpId[]) {
     .reduce((sum, b) => sum + b.price, 0);
 }
 
-export function serializeBumpIds(ids: readonly CheckoutBumpId[]) {
+export function serializeBumpIds(ids: readonly CheckoutBumpId[]): BumpsSearchParam {
   return ids.join(",");
+}
+
+export function parseAmountParam(raw: unknown): number | undefined {
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "string" && raw.trim()) {
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : undefined;
+  }
+  return undefined;
 }
 
 export const barreiras = [

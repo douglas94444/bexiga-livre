@@ -5,7 +5,11 @@ import { PRODUCT_NAME } from "@/components/landing/offer-data";
 import type { PlanId } from "@/components/landing-v2/v2-offer-data";
 import { plans } from "@/components/landing-v2/v2-offer-data";
 
-export function CheckoutHero({ plan }: { plan: PlanId }) {
+type CheckoutHeroProps = {
+  plan: PlanId;
+};
+
+export function CheckoutHero({ plan }: CheckoutHeroProps) {
   const planData = plans[plan];
   const showBonuses = plan === "completo";
 

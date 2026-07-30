@@ -5,10 +5,10 @@ import {
   offerStackCopy,
   offerStackGrid,
 } from "./v2-offer-data";
-import { V2Accent, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Section, V2Title } from "./shared";
 import { cn } from "@/lib/utils";
 
-export function WhatYouGet({ onCta }: { onCta: () => void }) {
+export function WhatYouGet({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="muted">
       <V2Title>

@@ -4,9 +4,9 @@ import {
   strategyCategories,
   strategyCategoriesCopy,
 } from "./v2-offer-data";
-import { V2Accent, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
 
-export function StrategyCategoriesV2({ onCta }: { onCta: () => void }) {
+export function StrategyCategoriesV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="muted">
       <V2Title>

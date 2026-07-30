@@ -1,6 +1,8 @@
 import { toast } from "sonner";
 import type { CheckoutBumpId } from "@/components/landing/offer-data";
 
+export type PayMethod = "pix" | "card";
+
 export type MercadoPagoCheckoutInput = {
   email: string;
   name: string;
@@ -9,7 +11,7 @@ export type MercadoPagoCheckoutInput = {
   document?: string;
   amount: number;
   bumpIds: CheckoutBumpId[];
-  payMethod?: "pix" | "card";
+  payMethod?: PayMethod;
 };
 
 /**

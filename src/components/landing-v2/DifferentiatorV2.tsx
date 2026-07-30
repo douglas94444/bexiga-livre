@@ -4,9 +4,9 @@ import {
   differentiatorFeatures,
   heroCopy,
 } from "./v2-offer-data";
-import { V2Card, V2Cta, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Card, V2Cta, V2Section, V2Title } from "./shared";
 
-export function DifferentiatorV2({ onCta }: { onCta: () => void }) {
+export function DifferentiatorV2({ onCta }: CtaHandlerProps) {
   return (
     <V2Section tone="muted">
       <V2Title>{differentiatorCopy.title}</V2Title>

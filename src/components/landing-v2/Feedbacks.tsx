@@ -13,7 +13,7 @@ import {
   testimonialAvatarKeys,
   testimonials,
 } from "./v2-offer-data";
-import { V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
+import { type CtaHandlerProps, V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Title } from "./shared";
 
 const avatars: Record<string, string> = {
   marcia: avatarMarcia,
@@ -26,7 +26,7 @@ const avatars: Record<string, string> = {
   andrea: avatarAndrea,
 };
 
-export function Feedbacks({ onCta }: { onCta: () => void }) {
+export function Feedbacks({ onCta }: CtaHandlerProps) {
   const reviewLabel = new Intl.NumberFormat("pt-BR").format(
     SOCIAL_PROOF.reviewsCount,
   );
