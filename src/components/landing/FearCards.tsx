@@ -1,26 +1,26 @@
-import { Heart, Moon, Plane, Sun } from "lucide-react";
+import { Briefcase, Heart, Moon, Plane } from "lucide-react";
 import { Reveal, Section, SectionLead, SectionTitle } from "./shared";
 
 const medos = [
   {
-    icon: Plane,
-    title: "Medo de viajar",
-    text: "Você calcula distâncias, banheiros e o “e se acontecer longe de casa?” antes de aceitar qualquer convite.",
+    icon: Moon,
+    title: "Noites em claro",
+    text: "Correndo para o banheiro, checando sinais, sem nunca descansar de verdade.",
   },
   {
-    icon: Moon,
-    title: "Medo de dormir",
-    text: "A noite vira vigilância. Você acorda, checa, volta a deitar e nunca descansa por completo.",
+    icon: Plane,
+    title: "Medo de sair e viajar",
+    text: "Passeios cancelados, viagens adiadas e o “e se acontecer longe de casa?” sempre no caminho.",
   },
   {
     icon: Heart,
-    title: "Medo da intimidade",
-    text: "O que deveria ser afeto virou cálculo de risco. E a distância vai crescendo em silêncio.",
+    title: "Afastamento na intimidade",
+    text: "O que deveria ser afeto virou cálculo de risco — e a distância cresce em silêncio.",
   },
   {
-    icon: Sun,
-    title: "Medo de sair",
-    text: "Sair de casa passou a exigir plano B, remédio na bolsa e um mapa mental de banheiros.",
+    icon: Briefcase,
+    title: "Dias perdidos na dor",
+    text: "Trabalho, rotina e planos que a infecção e o medo simplesmente engolem.",
   },
 ];
 
@@ -29,14 +29,15 @@ export function FearCards() {
     <Section>
       <Reveal>
         <SectionTitle>
-          Você não sofre apenas com uma infecção.
+          Mais do que desconforto:
           <span className="block text-muted-foreground">
-            Você vive esperando a próxima.
+            o tempo que você perdeu.
           </span>
         </SectionTitle>
         <SectionLead>
-          O maior peso não é a crise. É o estado de alerta permanente entre uma
-          crise e outra.
+          Porque isso nunca foi só sobre a urgência no banheiro. É sobre a
+          liberdade que a dor — e a espera da próxima crise — já roubou de você.
+          Se importar aqui não é vaidade.
         </SectionLead>
       </Reveal>
 

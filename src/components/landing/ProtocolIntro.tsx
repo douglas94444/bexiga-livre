@@ -5,18 +5,18 @@ import { Reveal, Section } from "./shared";
 const pontos = [
   {
     icon: Stethoscope,
-    title: "Não promete cura",
-    text: "Nenhum material educativo cura infecção urinária. O que ele faz é te tirar da improvisação.",
+    title: "Não promete “acabar com a infecção”",
+    text: "A maioria dos produtos desse nicho vende a mesma promessa vazia de suco, chá e cápsula. Este começa do jeito oposto: plano e clareza, sem milagre.",
   },
   {
     icon: ShieldCheck,
-    title: "Não substitui médico",
-    text: "Ele complementa o acompanhamento profissional e te ajuda a chegar na consulta muito melhor informada.",
+    title: "Não substitui o médico",
+    text: "Existe um capítulo inteiro sobre sinais de alerta — febre, sangue, dor lombar — e quando ir ao médico sem demora.",
   },
   {
     icon: LayoutList,
-    title: "Organiza o essencial",
-    text: "Reúne, em um plano único, tudo que você deveria ter aprendido na sua primeira infecção urinária.",
+    title: "Organiza o quadro completo",
+    text: "Em vez de mais um tip solto, você recebe o produto principal Protocolo Bexiga Blindada™ e 4 bônus: Guia Alimentar, SOS, Kit Viagem e Durma a Noite Toda.",
   },
 ];
 
@@ -27,7 +27,7 @@ export function ProtocolIntro() {
         <Reveal>
           <img
             src={mockup}
-            alt="Mockup do Protocolo Bexiga Livre com dossiê impresso, plano digital em tablet e checklist semanal"
+            alt="Mockup do Protocolo Bexiga Blindada com dossiê impresso, plano digital em tablet e checklist semanal"
             width={1200}
             height={1008}
             loading="lazy"
@@ -38,11 +38,12 @@ export function ProtocolIntro() {
         <Reveal delay={0.1}>
           <div className="min-w-0">
             <h2 className="text-balance text-[2rem] font-semibold leading-[1.15] tracking-[-0.02em] sm:text-[2.75rem]">
-              Conheça o Protocolo Bexiga Livre™
+              Diferente de tudo que você já tentou
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-[1.375rem]">
-              Não é um ebook. É um protocolo educativo estruturado — com plano,
-              rotina, checklists e um caminho claro para os primeiros sinais.
+              Este material não promete cura nem milagre. Organiza, em um só
+              lugar, informação clara e o Método B.A.R.R.E.I.R.A™ — prevenção
+              como complemento do acompanhamento médico, nunca substituto.
             </p>
 
             <ul className="mt-10 space-y-7">

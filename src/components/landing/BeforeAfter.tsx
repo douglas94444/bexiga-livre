@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowRight } from "lucide-react";
+﻿import { ArrowDown, ArrowRight } from "lucide-react";
 import { Reveal, Section, SectionTitle } from "./shared";
 
 const antes = [
@@ -51,7 +51,7 @@ export function BeforeAfter() {
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand">
               Protocolo
               <br />
-              Bexiga Livre™
+              Bexiga Blindada™
             </p>
           </div>
         </Reveal>

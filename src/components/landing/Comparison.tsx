@@ -2,18 +2,18 @@ import { Reveal, Section, SectionTitle } from "./shared";
 
 const internet = [
   "Informações soltas",
-  "YouTube",
-  "Google",
-  "Receitas caseiras",
+  "Promessas de “acabar com a infecção”",
+  "Receitas e fóruns contraditórios",
+  "Tratar um sintoma de cada vez",
 ];
 
 const protocolo = [
-  "Tudo organizado",
-  "Plano",
-  "Checklist",
-  "Rotina",
-  "Método",
-  "Acompanhamento do seu progresso",
+  "Produto principal: Protocolo Bexiga Blindada™",
+  "Método B.A.R.R.E.I.R.A™",
+  "Bônus 1 — Guia Alimentar",
+  "Bônus 2 — Plano SOS Primeiros Sinais",
+  "Bônus 3 — Kit Viagem Sem Medo",
+  "Bônus 4 — Durma a Noite Toda",
 ];
 
 export function Comparison() {
@@ -46,7 +46,7 @@ export function Comparison() {
         <Reveal delay={0.1}>
           <div className="h-full rounded-[1.75rem] border border-brand/20 bg-brand-tint p-8">
             <p className="text-sm font-medium uppercase tracking-[0.18em] text-brand">
-              Protocolo Bexiga Livre™
+              Protocolo Bexiga Blindada™
             </p>
             <ul className="mt-6 space-y-3 text-lg">
               {protocolo.map((item) => (

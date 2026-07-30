@@ -6,13 +6,14 @@ export function FinalCta() {
       <Reveal>
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-balance text-[2rem] font-semibold leading-[1.15] tracking-[-0.02em] sm:text-[2.75rem]">
-            Chega de organizar sua vida em torno do medo da próxima crise.
+            Chega de aceitar isso como normal.
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground sm:text-[1.375rem]">
-            Recupere sua tranquilidade. Comece hoje.
+            Baixe agora o Protocolo Bexiga Blindada™. Acesso imediato por download,
+            pagamento único e garantia de 7 dias.
           </p>
           <div className="mt-10">
-            <CtaButton href="#">QUERO VOLTAR A VIVER</CtaButton>
+            <CtaButton>QUERO O PROTOCOLO AGORA</CtaButton>
           </div>
         </div>
       </Reveal>
@@ -25,15 +26,15 @@ export function LandingFooter() {
     <footer className="border-t border-border px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-sm font-medium tracking-tight">
-          Protocolo Bexiga Livre™
+          Protocolo Bexiga Blindada™
         </p>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-          Conteúdo estritamente educativo. Não realiza diagnóstico, não prescreve
-          tratamento e não substitui a orientação de um profissional de saúde.
-          Em caso de sintomas, procure seu médico.
+          Este material é educativo e não substitui avaliação, diagnóstico ou
+          tratamento médico. Resultados podem variar de pessoa para pessoa. Em
+          caso de sintomas, procure seu médico.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Protocolo Bexiga Livre™
+          © {new Date().getFullYear()} Protocolo Bexiga Blindada™
         </p>
       </div>
     </footer>

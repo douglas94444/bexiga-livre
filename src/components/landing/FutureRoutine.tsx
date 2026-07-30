@@ -1,7 +1,7 @@
 import cafe from "@/assets/rotina-cafe.jpg";
 import dormir from "@/assets/rotina-dormir.jpg";
 import viajar from "@/assets/rotina-viajar.jpg";
-import { Reveal, Section, SectionLead, SectionTitle } from "./shared";
+import { CtaButton, Reveal, Section, SectionLead, SectionTitle } from "./shared";
 
 const cenas = [
   {
@@ -56,6 +56,12 @@ export function FutureRoutine() {
           Você não quer apenas prevenir.
           <span className="block text-brand">Você quer voltar a viver.</span>
         </p>
+      </Reveal>
+
+      <Reveal delay={0.15}>
+        <div className="mt-10 flex justify-center">
+          <CtaButton>QUERO MEU PROTOCOLO AGORA</CtaButton>
+        </div>
       </Reveal>
     </Section>
   );

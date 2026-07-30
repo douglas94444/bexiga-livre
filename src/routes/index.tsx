@@ -1,61 +1,92 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Hero } from "@/components/landing/Hero";
-import { BeforeAfter } from "@/components/landing/BeforeAfter";
-import { FearCards } from "@/components/landing/FearCards";
-import { TriedEverything } from "@/components/landing/TriedEverything";
-import { ProtocolIntro } from "@/components/landing/ProtocolIntro";
-import { MethodLivre } from "@/components/landing/MethodLivre";
-import { Deliverables } from "@/components/landing/Deliverables";
-import { FutureRoutine } from "@/components/landing/FutureRoutine";
-import { Comparison } from "@/components/landing/Comparison";
-import { Faq } from "@/components/landing/Faq";
-import { Offer } from "@/components/landing/Offer";
-import { FinalCta, LandingFooter } from "@/components/landing/FinalCta";
-import { faqItems } from "@/components/landing/faq-data";
+import { BarreiraGridV2 } from "@/components/landing-v2/BarreiraGridV2";
+import { BonusesGiftV2 } from "@/components/landing-v2/BonusesGiftV2";
+import { DifferentiatorV2 } from "@/components/landing-v2/DifferentiatorV2";
+import { FaqV2, landingFaqItems } from "@/components/landing-v2/FaqV2";
+import { Feedbacks } from "@/components/landing-v2/Feedbacks";
+import { FinalCtaV2, FooterV2 } from "@/components/landing-v2/FinalCtaV2";
+import { GuaranteeV2 } from "@/components/landing-v2/GuaranteeV2";
+import { HeroV2 } from "@/components/landing-v2/HeroV2";
+import { IdealFor } from "@/components/landing-v2/IdealFor";
+import { LifeAfterV2 } from "@/components/landing-v2/LifeAfterV2";
+import { useOrderBumpFunnel } from "@/components/landing-v2/OrderBumpModals";
+import { PricingDual } from "@/components/landing-v2/PricingDual";
+import { PromoBar } from "@/components/landing-v2/PromoBar";
+import { ProtocolLibraryV2 } from "@/components/landing-v2/ProtocolLibraryV2";
+import { StickyPricingCta } from "@/components/landing-v2/StickyPricingCta";
+import { StrategyCategoriesV2 } from "@/components/landing-v2/StrategyCategoriesV2";
+import { SymptomsV2 } from "@/components/landing-v2/SymptomsV2";
+import { WhatYouGet } from "@/components/landing-v2/WhatYouGet";
+import { WhatsAppTestimonialsV2 } from "@/components/landing-v2/WhatsAppTestimonialsV2";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  SITE_NAME,
+  absoluteOgImage,
+  absoluteUrl,
+} from "@/lib/seo";
+import { trackViewContent } from "@/lib/meta-pixel";
+import { useEffect } from "react";
 
-const title = "Protocolo Bexiga Livre™ | Programa educativo para infecção urinária de repetição";
-const description =
-  "Programa educativo para mulheres com infecções urinárias repetidas: plano preventivo, checklists e o Método L.I.V.R.E. para voltar a dormir, viajar e sair sem medo.";
-
-const metaPixelScript = `(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})
-(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1511388837456671');
-fbq('track', 'PageView');`;
+const title = DEFAULT_TITLE;
+const description = DEFAULT_DESCRIPTION;
+const pageUrl = absoluteUrl("/");
+const ogImage = absoluteOgImage();
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: LandingHomePage,
   head: () => ({
     meta: [
       { title },
       { name: "description", content: description },
+      { name: "robots", content: "index, follow" },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "product" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: pageUrl },
+      { property: "og:image", content: ogImage },
+      { property: "og:locale", content: "pt_BR" },
+      { property: "og:site_name", content: SITE_NAME },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "twitter:image", content: ogImage },
     ],
-    links: [{ rel: "canonical", href: "/" }],
-    scripts: [
+    links: [
+      { rel: "canonical", href: pageUrl },
       {
-        type: "text/javascript",
-        children: metaPixelScript,
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap",
       },
+    ],
+    scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Product",
-          name: "Protocolo Bexiga Livre™",
+          name: SITE_NAME,
           description,
-          offers: {
-            "@type": "Offer",
-            price: "27.00",
-            priceCurrency: "BRL",
-            availability: "https://schema.org/InStock",
-          },
+          image: [ogImage],
+          brand: { "@type": "Brand", name: SITE_NAME },
+          offers: [
+            {
+              "@type": "Offer",
+              name: "Protocolo Completo",
+              price: "27.00",
+              priceCurrency: "BRL",
+              availability: "https://schema.org/InStock",
+              url: pageUrl,
+            },
+            {
+              "@type": "Offer",
+              name: "Protocolo Essencial",
+              price: "10.00",
+              priceCurrency: "BRL",
+              availability: "https://schema.org/InStock",
+              url: pageUrl,
+            },
+          ],
         }),
       },
       {
@@ -63,7 +94,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: faqItems.map((item) => ({
+          mainEntity: landingFaqItems.map((item) => ({
             "@type": "Question",
             name: item.q,
             acceptedAnswer: { "@type": "Answer", text: item.a },
@@ -74,22 +105,35 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-function Index() {
+function LandingHomePage() {
+  const { selectPlan, openCompletoDirect, modals } = useOrderBumpFunnel();
+
+  useEffect(() => {
+    trackViewContent();
+  }, []);
+
   return (
-    <main className="bg-background">
-      <Hero />
-      <BeforeAfter />
-      <FearCards />
-      <TriedEverything />
-      <ProtocolIntro />
-      <MethodLivre />
-      <Deliverables />
-      <FutureRoutine />
-      <Comparison />
-      <Faq />
-      <Offer />
-      <FinalCta />
-      <LandingFooter />
+    <main className="landing-v2 bg-background text-foreground">
+      <PromoBar />
+      <HeroV2 onPrimaryCta={openCompletoDirect} />
+      <SymptomsV2 onCta={openCompletoDirect} />
+      <DifferentiatorV2 onCta={openCompletoDirect} />
+      <WhatsAppTestimonialsV2 onCta={openCompletoDirect} />
+      <ProtocolLibraryV2 onCta={openCompletoDirect} />
+      <StrategyCategoriesV2 onCta={openCompletoDirect} />
+      <WhatYouGet onCta={openCompletoDirect} />
+      <IdealFor onCta={openCompletoDirect} />
+      <BarreiraGridV2 onCta={openCompletoDirect} />
+      <BonusesGiftV2 onCta={openCompletoDirect} />
+      <LifeAfterV2 onCta={openCompletoDirect} />
+      <PricingDual onSelect={selectPlan} />
+      <Feedbacks onCta={openCompletoDirect} />
+      <GuaranteeV2 />
+      <FaqV2 />
+      <FinalCtaV2 onCta={openCompletoDirect} />
+      <FooterV2 />
+      <StickyPricingCta />
+      {modals}
     </main>
   );
 }

@@ -1,42 +1,6 @@
-import { Reveal, Section, SectionLead, SectionTitle } from "./shared";
-
-const itens = [
-  {
-    emoji: "📘",
-    title: "Protocolo Principal",
-    text: "O plano completo, do entendimento do problema à rotina preventiva.",
-  },
-  {
-    emoji: "🍓",
-    title: "Guia Alimentar da Bexiga Saudável",
-    text: "O que priorizar, o que observar e como montar o dia sem complicação.",
-  },
-  {
-    emoji: "🚽",
-    title: "Plano SOS Primeiros Sinais",
-    text: "O que fazer nas primeiras horas, com clareza, sem pânico.",
-  },
-  {
-    emoji: "✈️",
-    title: "Kit Viagem Sem Medo",
-    text: "Preparo antes, durante e depois da viagem — para voltar a dizer sim.",
-  },
-  {
-    emoji: "🌙",
-    title: "Durma a Noite Toda",
-    text: "Estratégias noturnas para reduzir idas ao banheiro e recuperar o sono.",
-  },
-  {
-    emoji: "📅",
-    title: "Plano Preventivo de 30 Dias",
-    text: "Um mês guiado, semana a semana, sem depender de força de vontade.",
-  },
-  {
-    emoji: "📋",
-    title: "Checklist Diário",
-    text: "Uma página simples para manter a rotina viva todos os dias.",
-  },
-];
+import mockupBlindada from "@/assets/mockup-blindada-bonus.png";
+import { CtaButton, Reveal, Section, SectionLead, SectionTitle } from "./shared";
+import { bonuses, mainProduct } from "./offer-data";
 
 export function Deliverables() {
   return (
@@ -44,27 +8,58 @@ export function Deliverables() {
       <Reveal>
         <SectionTitle>O que você recebe hoje</SectionTitle>
         <SectionLead>
-          Sete materiais independentes que funcionam como um programa único.
+          Produto principal + 4 bônus exclusivos. Acesso imediato por download.
         </SectionLead>
       </Reveal>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {itens.map((item, i) => (
-          <Reveal key={item.title} delay={i * 0.05}>
-            <article className="flex h-full flex-col rounded-[1.75rem] border border-border bg-muted p-8">
-              <span className="text-3xl" aria-hidden="true">
-                {item.emoji}
-              </span>
-              <h3 className="mt-5 text-xl font-semibold tracking-tight">
-                {item.title}
-              </h3>
-              <p className="mt-3 text-lg leading-relaxed text-muted-foreground">
-                {item.text}
+      <Reveal delay={0.05}>
+        <div className="mx-auto mt-10 max-w-5xl">
+          <img
+            src={mockupBlindada}
+            alt="Protocolo Bexiga Blindada™ com produto principal e 4 bônus exclusivos"
+            width={1600}
+            height={900}
+            loading="lazy"
+            className="mx-auto h-auto w-full"
+          />
+        </div>
+      </Reveal>
+
+      <div className="mt-12 grid gap-5 lg:grid-cols-5">
+        <Reveal>
+          <article className="flex h-full flex-col rounded-[1.75rem] border-2 border-brand/30 bg-brand-tint/40 p-7 lg:col-span-1">
+            <p className="text-sm font-medium uppercase tracking-[0.14em] text-brand">
+              {mainProduct.label}
+            </p>
+            <h3 className="mt-4 text-xl font-semibold tracking-tight">
+              {mainProduct.title}
+            </h3>
+            <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+              {mainProduct.text}
+            </p>
+          </article>
+        </Reveal>
+
+        {bonuses.map((b, i) => (
+          <Reveal key={b.title} delay={(i + 1) * 0.04}>
+            <article className="flex h-full flex-col rounded-[1.75rem] border border-border bg-muted p-7">
+              <p className="text-sm font-medium uppercase tracking-[0.14em] text-brand">
+                {b.label}
+              </p>
+              <h3 className="mt-4 text-lg font-semibold tracking-tight">{b.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+                {b.text}
               </p>
             </article>
           </Reveal>
         ))}
       </div>
+
+      <Reveal delay={0.15}>
+        <div className="mt-12 flex justify-center">
+          <CtaButton>QUERO MEU PROTOCOLO AGORA</CtaButton>
+        </div>
+      </Reveal>
     </Section>
   );
 }

@@ -1,19 +1,42 @@
-import { Reveal, Section, SectionTitle } from "./shared";
+import { CtaButton, Reveal, Section, SectionLead, SectionTitle } from "./shared";
 
 const tentativas = [
-  { label: "Mais água", text: "E a garrafa virou obrigação diária." },
-  { label: "Mais antibiótico", text: "Mais uma caixa, mais uma recaída depois." },
-  { label: "Mais cranberry", text: "Cápsulas, sucos, promessas na internet." },
-  { label: "Mais chá", text: "Receitas caseiras, cada dia uma diferente." },
-  { label: "Mais promessas", text: "Vídeos, fóruns, opiniões contraditórias." },
-  { label: "Resultado", text: "A infecção volta.", highlight: true },
+  {
+    label: "Mais água",
+    text: "E a garrafa virou obrigação — sem explicar o quadro completo.",
+  },
+  {
+    label: "Mais antibiótico",
+    text: "Mais uma caixa, mais uma recaída depois. O sintoma passa; a dúvida fica.",
+  },
+  {
+    label: "Mais cranberry",
+    text: "Uso irregular, suco cheio de açúcar, cápsula genérica… e a expectativa de que “só isso” resolvesse.",
+  },
+  {
+    label: "Mais chá",
+    text: "Receitas caseiras, cada dia uma diferente, zero plano.",
+  },
+  {
+    label: "Mais promessas",
+    text: "A mesma frase vazia: “acaba com a infecção urinária” — e a infecção volta.",
+  },
+  {
+    label: "Resultado",
+    text: "Você tratou pedaços isolados. A infecção de repetição quase sempre é a soma de fatores.",
+    highlight: true,
+  },
 ];
 
 export function TriedEverything() {
   return (
     <Section tone="muted">
       <Reveal>
-        <SectionTitle>Você já tentou de tudo.</SectionTitle>
+        <SectionTitle>Por que nada resolveu até agora</SectionTitle>
+        <SectionLead>
+          Você já tentou de tudo. Isso não significa que não existe caminho.
+          Significa que ninguém te deu o quadro completo.
+        </SectionLead>
       </Reveal>
 
       <div className="mx-auto mt-14 max-w-2xl">
@@ -41,9 +64,22 @@ export function TriedEverything() {
 
         <Reveal delay={0.1}>
           <p className="mt-12 text-balance text-center text-2xl font-semibold leading-snug tracking-tight">
-            O problema nunca foi falta de esforço.
-            <span className="block text-brand">Foi falta de um plano.</span>
+            Não é falha sua.
+            <span className="block text-brand">
+              É que ninguém te mostrou a causa composta.
+            </span>
           </p>
+          <p className="mx-auto mt-4 max-w-xl text-center text-lg leading-relaxed text-muted-foreground">
+            Hidratação, hábitos após a relação, roupa, rotina — atacar só um
+            pedaço de cada vez dificilmente muda o ciclo. O protocolo organiza o
+            que estava espalhado.
+          </p>
+        </Reveal>
+
+        <Reveal delay={0.15}>
+          <div className="mt-10 flex justify-center">
+            <CtaButton>QUERO MEU PROTOCOLO AGORA</CtaButton>
+          </div>
         </Reveal>
       </div>
     </Section>

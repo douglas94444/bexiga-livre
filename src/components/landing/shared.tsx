@@ -1,8 +1,9 @@
+import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export const CHECKOUT_URL = "#oferta";
+export const CHECKOUT_URL = "/checkout";
 
 export function Reveal({
   children,
@@ -94,6 +95,9 @@ export function SectionLead({
   );
 }
 
+const ctaClassName =
+  "inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-8 text-base font-semibold tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto sm:text-lg";
+
 export function CtaButton({
   children,
   className,
@@ -103,14 +107,19 @@ export function CtaButton({
   className?: string;
   href?: string;
 }) {
+  const classes = cn(ctaClassName, className);
+  const isInternal = href.startsWith("/") && !href.startsWith("//");
+
+  if (isInternal) {
+    return (
+      <Link to={href} className={classes}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      className={cn(
-        "inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-8 text-base font-semibold tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto sm:text-lg",
-        className,
-      )}
-    >
+    <a href={href} className={classes}>
       {children}
     </a>
   );
