@@ -1,8 +1,8 @@
 import { Check, Gift, Lock } from "lucide-react";
-import mockupAlimentar from "@/assets/mockup-bonus-alimentar.png";
-import mockupSos from "@/assets/mockup-bonus-sos.png";
-import mockupViagem from "@/assets/mockup-bonus-viagem.png";
-import mockupNoite from "@/assets/mockup-bonus-noite.png";
+import mockupAlimentar from "@/assets/mockup-bonus-alimentar.jpg";
+import mockupSos from "@/assets/mockup-bonus-sos.jpg";
+import mockupViagem from "@/assets/mockup-bonus-viagem.jpg";
+import mockupNoite from "@/assets/mockup-bonus-noite.jpg";
 import {
   bonusTotalValue,
   bonuses,

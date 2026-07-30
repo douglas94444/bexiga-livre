@@ -25,6 +25,7 @@ import {
   type CheckoutFormErrors,
 } from "@/lib/checkout-schema";
 import { startMercadoPagoCheckout, type PayMethod } from "@/lib/mercadopago";
+import { saveOrder } from "@/lib/orders";
 import {
   createEventId,
   persistPurchaseEventId,
@@ -199,6 +200,17 @@ function CheckoutPage() {
     fireAddPaymentInfo();
 
     try {
+      await saveOrder({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        cpf: digitsOnly(parsed.data.cpf),
+        phone: parsed.data.phone,
+        plan,
+        bumpIds: parsed.data.bumpIds,
+        total,
+        payMethod: parsed.data.payMethod,
+      });
+
       await startMercadoPagoCheckout({
         name: parsed.data.name,
         email: parsed.data.email,
