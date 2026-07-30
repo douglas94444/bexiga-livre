@@ -40,14 +40,14 @@ export function FooterV2() {
     <footer className="border-t border-border bg-background px-5 py-12 sm:px-8">
       <div className="mx-auto max-w-2xl text-center">
         <p className="font-display text-lg font-semibold tracking-tight">
-          Protocolo Bexiga Blindada
+          Protocolo Bexiga Blindada™
         </p>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           Este material é educativo e não substitui avaliação, diagnóstico ou
           tratamento médico. Resultados podem variar de pessoa para pessoa.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Protocolo Bexiga Blindada
+          © {new Date().getFullYear()} Protocolo Bexiga Blindada™
         </p>
       </div>
     </footer>
