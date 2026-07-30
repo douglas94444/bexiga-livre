@@ -83,7 +83,7 @@ export const Route = createFileRoute("/checkout")({
 
 function CheckoutPage() {
   const navigate = useNavigate();
-  const { plan, bumps: bumpsParam } = Route.useSearch();
+  const { plan, bumps: bumpsParam }: CheckoutSearch = Route.useSearch();
   const initialIds = useMemo(() => parseBumpIds(bumpsParam), [bumpsParam]);
 
   const [name, setName] = useState("");
