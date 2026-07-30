@@ -10,8 +10,11 @@ import {
   serializeBumpIds,
 } from "@/components/landing/offer-data";
 import {
+  loadMetaUserData,
+  loadPurchaseEventId,
   planContentId,
   planContentName,
+  setMetaUserData,
   trackPurchaseOnce,
 } from "@/lib/meta-pixel";
 
@@ -54,12 +57,22 @@ function ObrigadoPage() {
       planContentId(plan),
       ...bumpIds.map((id) => `bump-${id}`),
     ];
-    trackPurchaseOnce(`${plan}_${bumpsParam}_${value}`, {
-      content_name: planContentName(plan),
-      content_ids: contentIds,
-      value,
-      num_items: contentIds.length,
-    });
+
+    const userData = loadMetaUserData();
+    if (userData) setMetaUserData(userData);
+
+    const eventID = loadPurchaseEventId() ?? undefined;
+
+    trackPurchaseOnce(
+      `${plan}_${bumpsParam}_${value}`,
+      {
+        content_name: planContentName(plan),
+        content_ids: contentIds,
+        value,
+        num_items: contentIds.length,
+      },
+      eventID ? { eventID } : undefined,
+    );
   }, [plan, bumpsParam, bumpIds, purchaseValue]);
 
   return (

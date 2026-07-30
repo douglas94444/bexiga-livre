@@ -20,8 +20,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { startMercadoPagoCheckout } from "@/lib/mercadopago";
 import {
+  createEventId,
+  persistPurchaseEventId,
   planContentId,
   planContentName,
+  setMetaUserData,
   trackAddPaymentInfo,
   trackAddToCart,
   trackInitiateCheckout,
@@ -125,12 +128,24 @@ function CheckoutPage() {
   }
 
   function fireAddPaymentInfo() {
-    trackAddPaymentInfo({
-      content_name: planContentName(plan),
-      content_ids: contentIds,
-      value: total,
-      payment_method: payMethod,
+    setMetaUserData({
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
     });
+
+    const eventID = createEventId();
+    persistPurchaseEventId(eventID);
+
+    trackAddPaymentInfo(
+      {
+        content_name: planContentName(plan),
+        content_ids: contentIds,
+        value: total,
+        payment_method: payMethod,
+      },
+      { eventID },
+    );
   }
 
   function goObrigado() {

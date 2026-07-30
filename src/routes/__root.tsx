@@ -29,6 +29,7 @@ t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})
 (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1511388837456671');
 fbq('track', 'PageView');`;
+// PIXEL_ID espelhado em META_PIXEL_ID (src/lib/meta-pixel.ts) para Advanced Matching
 
 function NotFoundComponent() {
   return (
@@ -97,6 +98,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "facebook-domain-verification",
+        content: "fb1fi1smmq4en4x18ud1qdjq4351ip",
+      },
       { title: DEFAULT_TITLE },
       { name: "description", content: DEFAULT_DESCRIPTION },
       { name: "author", content: SITE_NAME },
