@@ -5,7 +5,7 @@ import { type CtaHandlerProps, V2Card, V2Cta, V2Section, V2Title } from "./share
 export function IdealFor({ onCta }: CtaHandlerProps) {
   return (
     <V2Section>
-      <V2Title>Este protocolo é perfeito para você que:</V2Title>
+      <V2Title>Este protocolo Ã© perfeito para vocÃª que:</V2Title>
       <ul className="mx-auto mt-10 max-w-2xl space-y-4">
         {idealForItems.map((item) => (
           <V2Card
