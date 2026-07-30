@@ -30,3 +30,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# PDF originals (antes das capas de marca)
+public/_originals/
