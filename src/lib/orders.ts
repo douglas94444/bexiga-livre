@@ -16,7 +16,7 @@ export type SaveOrderInput = {
 /** Grava o pedido iniciado no banco. Nunca quebra o fluxo de checkout. */
 export async function saveOrder(input: SaveOrderInput) {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("orders")
       .insert({
         name: input.name,
@@ -27,15 +27,13 @@ export async function saveOrder(input: SaveOrderInput) {
         bumps: input.bumpIds,
         total_cents: Math.round(input.total * 100),
         pay_method: input.payMethod,
-      })
-      .select("id")
-      .single();
+      });
 
     if (error) {
       console.error("[orders] falha ao gravar pedido", error);
       return { ok: false as const };
     }
-    return { ok: true as const, id: data.id };
+    return { ok: true as const };
   } catch (error) {
     console.error("[orders] erro inesperado", error);
     return { ok: false as const };
