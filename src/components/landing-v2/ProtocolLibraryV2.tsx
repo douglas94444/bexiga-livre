@@ -2,8 +2,6 @@ import {
   Calendar,
   Droplets,
   Flower2,
-  Heart,
-  Leaf,
   ListChecks,
   Lock,
   Moon,
@@ -27,8 +25,6 @@ import { type CtaHandlerProps, V2Accent, V2Card, V2Cta, V2Lead, V2Section, V2Tit
 const iconMap: Record<(typeof protocolLibraryItems)[number]["icon"], LucideIcon> =
   {
     siren: Siren,
-    heart: Heart,
-    leaf: Leaf,
     droplets: Droplets,
     moon: Moon,
     plane: Plane,

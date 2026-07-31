@@ -158,7 +158,6 @@ export const differentiatorFeatures = [
   "21 protocolos práticos",
   "Plano SOS Primeiras 24 Horas",
   "Rotina Preventiva de 30 Dias",
-  "Guia Completo sobre Cranberry",
   "Acesso Vitalício",
 ] as const;
 
@@ -168,16 +167,6 @@ export const protocolLibraryItems = [
     icon: "siren" as const,
     title: "SOS Primeiras 24h",
     text: "Checklist para organizar as primeiras horas dos sinais.",
-  },
-  {
-    icon: "heart" as const,
-    title: "Checklist Pós-Relação",
-    text: "Hábitos práticos depois da intimidade.",
-  },
-  {
-    icon: "leaf" as const,
-    title: "Guia Cranberry",
-    text: "O que funciona de verdade — sem milagre de mercado.",
   },
   {
     icon: "droplets" as const,
@@ -248,10 +237,8 @@ export const protocolLibraryCopy = {
 
 export const strategyCategories = [
   "Primeiros Sintomas",
-  "Relação Sexual",
   "Viagem",
   "Sono",
-  "Cranberry",
   "Hidratação",
   "Menopausa",
   "Alimentação",
@@ -339,7 +326,6 @@ export const offerStackChecklist = [
 /** Grade 2 colunas — situações cobertas no material */
 export const offerStackGrid = [
   "Primeiras 24 horas",
-  "Hábitos pós-relação",
   "Hidratação prática",
   "Checklist de viagem",
   "Rotina noturna",
