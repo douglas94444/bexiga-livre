@@ -17,8 +17,8 @@ const SECURITY_HEADERS: Record<string, string> = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://api.mercadopago.com https://api.mercadolibre.com https://events.mercadopago.com",
-    "frame-src 'self' https://sdk.mercadopago.com",
+    "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://api.mercadopago.com https://*.mercadopago.com https://*.mercadolibre.com https://www.mercadolibre.com",
+    "frame-src 'self' https://sdk.mercadopago.com https://*.mercadopago.com https://*.mercadolibre.com https://www.mercadolibre.com",
   ].join("; "),
 };
 
