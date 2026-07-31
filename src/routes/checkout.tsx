@@ -1,6 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { Check, CreditCard, Lock, ShieldCheck, User } from "lucide-react";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { CardForm, type CardTokenPayload } from "@/components/checkout/CardForm";
+import { PixPanel } from "@/components/checkout/PixPanel";
 import { CheckoutHero } from "@/components/checkout/CheckoutHero";
 import { CheckoutOrderSummary } from "@/components/checkout/CheckoutOrderSummary";
 import { CheckoutTrustBar } from "@/components/checkout/CheckoutTrustBar";
@@ -24,8 +27,13 @@ import {
   parseCheckoutForm,
   type CheckoutFormErrors,
 } from "@/lib/checkout-schema";
-import { startMercadoPagoCheckout, type PayMethod } from "@/lib/mercadopago";
-import { saveOrder } from "@/lib/orders";
+import { cardStatusMessage, type PayMethod, type PixPaymentResult } from "@/lib/payment-types";
+import {
+  createCardPayment,
+  createPixPayment,
+  getPaymentConfig,
+  getPaymentStatus,
+} from "@/lib/payments.functions";
 import {
   createEventId,
   persistPurchaseEventId,
@@ -96,6 +104,27 @@ function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
+  const [publicKey, setPublicKey] = useState("");
+  const [pix, setPix] = useState<PixPaymentResult | null>(null);
+  const [checkingPix, setCheckingPix] = useState(false);
+  const tokenizerRef = useRef<(() => Promise<CardTokenPayload>) | null>(null);
+
+  const loadConfig = useServerFn(getPaymentConfig);
+  const startPix = useServerFn(createPixPayment);
+  const payWithCard = useServerFn(createCardPayment);
+  const checkStatus = useServerFn(getPaymentStatus);
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadConfig()
+      .then((config) => {
+        if (!cancelled) setPublicKey(config.publicKey);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [loadConfig]);
 
   useEffect(() => {
     setSelectedBumps(initialIds);
@@ -168,6 +197,46 @@ function CheckoutPage() {
     });
   }
 
+  function goToThankYou() {
+    void navigate({
+      to: "/obrigado",
+      search: { plan, bumps: serializeBumpIds(selectedBumps) },
+    });
+  }
+
+  // Polling do PIX: confirma o pagamento e leva para a página de obrigado.
+  useEffect(() => {
+    if (!pix) return;
+    let cancelled = false;
+    const deadline = Date.now() + 30 * 60 * 1000;
+
+    const interval = setInterval(async () => {
+      if (cancelled || Date.now() > deadline) {
+        clearInterval(interval);
+        return;
+      }
+      setCheckingPix(true);
+      try {
+        const result = await checkStatus({ data: { paymentId: pix.paymentId } });
+        if (!cancelled && result.approved) {
+          clearInterval(interval);
+          toast.success("Pagamento confirmado!");
+          goToThankYou();
+        }
+      } catch {
+        // silencioso: tenta de novo no próximo ciclo
+      } finally {
+        if (!cancelled) setCheckingPix(false);
+      }
+    }, 4000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pix]);
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
@@ -200,26 +269,44 @@ function CheckoutPage() {
     fireAddPaymentInfo();
 
     try {
-      await saveOrder({
+      const payer = {
         name: parsed.data.name,
         email: parsed.data.email,
         cpf: digitsOnly(parsed.data.cpf),
-        phone: parsed.data.phone,
+        phone: digitsOnly(parsed.data.phone),
         plan,
         bumpIds: parsed.data.bumpIds,
-        total,
-        payMethod: parsed.data.payMethod,
-      });
+      };
 
-      await startMercadoPagoCheckout({
-        name: parsed.data.name,
-        email: parsed.data.email,
-        phone: parsed.data.phone,
-        document: digitsOnly(parsed.data.cpf),
-        amount: total,
-        bumpIds: parsed.data.bumpIds,
-        payMethod: parsed.data.payMethod,
-      });
+      if (parsed.data.payMethod === "pix") {
+        const result = await startPix({ data: payer });
+        setPix(result);
+        toast.success("PIX gerado — pague para liberar o acesso.");
+        return;
+      }
+
+      if (!tokenizerRef.current) {
+        toast.error("Preencha os dados do cartão.");
+        return;
+      }
+
+      const card = await tokenizerRef.current();
+      const result = await payWithCard({ data: { ...payer, ...card } });
+
+      if (result.approved) {
+        toast.success("Pagamento aprovado!");
+        goToThankYou();
+        return;
+      }
+
+      toast.error(cardStatusMessage(result.statusDetail));
+    } catch (error) {
+      console.error("[checkout] falha no pagamento", error);
+      toast.error(
+        error instanceof Error && error.message
+          ? error.message
+          : "Não foi possível processar o pagamento. Tente novamente.",
+      );
     } finally {
       setSubmitting(false);
     }
