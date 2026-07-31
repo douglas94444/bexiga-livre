@@ -21,11 +21,14 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          mp_payment_id: string | null
           name: string
+          paid_at: string | null
           pay_method: string
           phone: string | null
           plan: string
           status: string
+          status_detail: string | null
           total_cents: number
         }
         Insert: {
@@ -34,11 +37,14 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          mp_payment_id?: string | null
           name: string
+          paid_at?: string | null
           pay_method: string
           phone?: string | null
           plan: string
           status?: string
+          status_detail?: string | null
           total_cents: number
         }
         Update: {
@@ -47,11 +53,14 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          mp_payment_id?: string | null
           name?: string
+          paid_at?: string | null
           pay_method?: string
           phone?: string | null
           plan?: string
           status?: string
+          status_detail?: string | null
           total_cents?: number
         }
         Relationships: []

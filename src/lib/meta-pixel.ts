@@ -1,6 +1,6 @@
 import { PRODUCT_NAME } from "@/components/landing/offer-data";
 import { plans, type PlanId } from "@/components/landing-v2/v2-offer-data";
-import type { PayMethod } from "@/lib/mercadopago";
+import type { PayMethod } from "@/lib/payment-types";
 
 export const META_PIXEL_ID = "1511388837456671";
 
