@@ -14,6 +14,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as V1RouteImport } from './routes/v1'
 import { Route as V2RouteImport } from './routes/v2'
+import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,12 @@ const V2Route = V2RouteImport.update({
   path: '/v2',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMercadopagoWebhookRoute =
+  ApiPublicMercadopagoWebhookRouteImport.update({
+    id: '/api/public/mercadopago-webhook',
+    path: '/api/public/mercadopago-webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +54,7 @@ export interface FileRoutesByFullPath {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +62,7 @@ export interface FileRoutesByTo {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +71,33 @@ export interface FileRoutesById {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/checkout' | '/obrigado' | '/v1' | '/v2'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/obrigado'
+    | '/v1'
+    | '/v2'
+    | '/api/public/mercadopago-webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/checkout' | '/obrigado' | '/v1' | '/v2'
-  id: '__root__' | '/' | '/checkout' | '/obrigado' | '/v1' | '/v2'
+  to:
+    | '/'
+    | '/checkout'
+    | '/obrigado'
+    | '/v1'
+    | '/v2'
+    | '/api/public/mercadopago-webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/obrigado'
+    | '/v1'
+    | '/v2'
+    | '/api/public/mercadopago-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +106,7 @@ export interface RootRouteChildren {
   ObrigadoRoute: typeof ObrigadoRoute
   V1Route: typeof V1Route
   V2Route: typeof V2Route
+  ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/mercadopago-webhook': {
+      id: '/api/public/mercadopago-webhook'
+      path: '/api/public/mercadopago-webhook'
+      fullPath: '/api/public/mercadopago-webhook'
+      preLoaderRoute: typeof ApiPublicMercadopagoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,17 +162,8 @@ const rootRouteChildren: RootRouteChildren = {
   ObrigadoRoute: ObrigadoRoute,
   V1Route: V1Route,
   V2Route: V2Route,
+  ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
