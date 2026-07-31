@@ -19,7 +19,13 @@ export type MercadoPagoCheckoutInput = {
  * para o checkout (PIX / cartão).
  */
 export async function startMercadoPagoCheckout(input: MercadoPagoCheckoutInput) {
-  console.info("[MercadoPago stub] checkout iniciado", input);
+  console.info("[MercadoPago stub] checkout iniciado", {
+    amount: input.amount,
+    bumpIds: input.bumpIds,
+    payMethod: input.payMethod,
+    hasEmail: Boolean(input.email),
+    hasDocument: Boolean(input.document),
+  });
 
   toast.message("Checkout preparado — integrar Mercado Pago", {
     description:

@@ -70,8 +70,10 @@ export function useOrderBumpFunnel() {
     else goCheckout("completo");
   }
 
-  function openCompletoDirect() {
-    goCheckout("completo");
+  function scrollToOffer() {
+    document
+      .getElementById("precos")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   const modals = (
@@ -123,5 +125,5 @@ export function useOrderBumpFunnel() {
     </Dialog>
   );
 
-  return { selectPlan, openCompletoDirect, modals };
+  return { selectPlan, scrollToOffer, modals };
 }

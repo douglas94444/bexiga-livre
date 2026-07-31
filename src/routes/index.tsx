@@ -106,7 +106,7 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingHomePage() {
-  const { selectPlan, openCompletoDirect, modals } = useOrderBumpFunnel();
+  const { selectPlan, scrollToOffer, modals } = useOrderBumpFunnel();
 
   useEffect(() => {
     trackViewContent();
@@ -115,22 +115,22 @@ function LandingHomePage() {
   return (
     <main className="landing-v2 bg-background text-foreground">
       <PromoBar />
-      <HeroV2 onPrimaryCta={openCompletoDirect} />
-      <SymptomsV2 onCta={openCompletoDirect} />
-      <DifferentiatorV2 onCta={openCompletoDirect} />
-      <WhatsAppTestimonialsV2 onCta={openCompletoDirect} />
-      <ProtocolLibraryV2 onCta={openCompletoDirect} />
-      <StrategyCategoriesV2 onCta={openCompletoDirect} />
-      <WhatYouGet onCta={openCompletoDirect} />
-      <IdealFor onCta={openCompletoDirect} />
-      <BarreiraGridV2 onCta={openCompletoDirect} />
-      <BonusesGiftV2 onCta={openCompletoDirect} />
-      <LifeAfterV2 onCta={openCompletoDirect} />
+      <HeroV2 onPrimaryCta={scrollToOffer} />
+      <SymptomsV2 onCta={scrollToOffer} />
+      <DifferentiatorV2 onCta={scrollToOffer} />
+      <WhatsAppTestimonialsV2 onCta={scrollToOffer} />
+      <ProtocolLibraryV2 onCta={scrollToOffer} />
+      <StrategyCategoriesV2 onCta={scrollToOffer} />
+      <WhatYouGet onCta={scrollToOffer} />
+      <IdealFor onCta={scrollToOffer} />
+      <BarreiraGridV2 onCta={scrollToOffer} />
+      <BonusesGiftV2 onCta={scrollToOffer} />
+      <LifeAfterV2 onCta={scrollToOffer} />
       <PricingDual onSelect={selectPlan} />
-      <Feedbacks onCta={openCompletoDirect} />
+      <Feedbacks onCta={scrollToOffer} />
       <GuaranteeV2 />
       <FaqV2 />
-      <FinalCtaV2 onCta={openCompletoDirect} />
+      <FinalCtaV2 onCta={scrollToOffer} />
       <FooterV2 />
       <StickyPricingCta />
       {modals}
