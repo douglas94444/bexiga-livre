@@ -646,6 +646,7 @@ function CheckoutPage() {
               tratamento e não substitui a orientação de um profissional de saúde.
             </p>
           </form>
+          )}
 
           <CheckoutOrderSummary
             plan={plan}
