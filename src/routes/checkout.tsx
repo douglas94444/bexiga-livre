@@ -327,6 +327,24 @@ function CheckoutPage() {
             className="mb-6 lg:hidden"
           />
 
+          {pix ? (
+            <div className="space-y-6">
+              <PixPanel
+                qrCode={pix.qrCode}
+                qrCodeBase64={pix.qrCodeBase64}
+                amount={total}
+                expiresAt={pix.expiresAt}
+                checking={checkingPix}
+              />
+              <button
+                type="button"
+                onClick={() => setPix(null)}
+                className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-border bg-background px-6 text-sm font-medium tracking-tight text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Voltar e alterar os dados
+              </button>
+            </div>
+          ) : (
           <form onSubmit={onSubmit} className="space-y-6">
             <section className="rounded-2xl border border-border bg-background p-5 sm:p-6">
               <div className="flex items-center gap-2">
@@ -485,10 +503,12 @@ function CheckoutPage() {
                   ))}
                 </ol>
               ) : (
-                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-                  Ao finalizar, você será redirecionada ao checkout seguro do Mercado Pago
-                  para pagar com cartão em até 12x (quando disponível).
-                </p>
+                <CardForm
+                  publicKey={publicKey}
+                  amount={total}
+                  cpfDigits={digitsOnly(cpf)}
+                  tokenizerRef={tokenizerRef}
+                />
               )}
             </section>
 
