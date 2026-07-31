@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { CheckoutBumpId } from "@/components/landing/offer-data";
 import { isCheckoutBumpId } from "@/components/landing/offer-data";
 import type { PlanId } from "@/components/landing-v2/v2-offer-data";
-import type { PayMethod } from "@/lib/mercadopago";
+import type { PayMethod } from "@/lib/payment-types";
 
 /** Remove máscara; retorna só dígitos. */
 export function digitsOnly(value: string): string {
