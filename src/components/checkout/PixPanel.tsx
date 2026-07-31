@@ -23,9 +23,12 @@ function useCountdown(expiresAt: string | null) {
   }, [expiresAt]);
 
   if (left === null) return null;
-  const minutes = String(Math.floor(left / 60)).padStart(2, "0");
+  const hours = Math.floor(left / 3600);
+  const minutes = String(Math.floor((left % 3600) / 60)).padStart(2, "0");
   const seconds = String(left % 60).padStart(2, "0");
-  return `${minutes}:${seconds}`;
+  return hours > 0
+    ? `${String(hours).padStart(2, "0")}:${minutes}:${seconds}`
+    : `${minutes}:${seconds}`;
 }
 
 export function PixPanel({
