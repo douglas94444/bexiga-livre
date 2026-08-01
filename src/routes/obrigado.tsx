@@ -200,6 +200,12 @@ function ObrigadoPage() {
           <Link to="/" className="text-muted-foreground underline-offset-2 hover:underline">
             Ir para o início
           </Link>
+          <Link
+            to="/acesso"
+            className="text-muted-foreground underline-offset-2 hover:underline"
+          >
+            Já comprei? Acessar meu material
+          </Link>
         </div>
       </div>
     </main>

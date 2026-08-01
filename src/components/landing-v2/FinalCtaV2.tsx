@@ -49,6 +49,14 @@ export function FooterV2() {
         <p className="mt-6 text-sm text-muted-foreground">
           © {new Date().getFullYear()} Protocolo Bexiga Blindada™
         </p>
+        <p className="mt-3 text-sm">
+          <a
+            href="/acesso"
+            className="text-muted-foreground underline-offset-2 hover:underline"
+          >
+            Já comprei? Acessar meu material
+          </a>
+        </p>
       </div>
     </footer>
   );
