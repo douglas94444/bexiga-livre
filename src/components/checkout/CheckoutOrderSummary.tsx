@@ -5,6 +5,7 @@ import {
   bonuses,
   checkoutBumps,
   formatBRL,
+  UPGRADE_BUMP_ID,
   type CheckoutBumpId,
 } from "@/components/landing/offer-data";
 import { plans, type PlanId } from "@/components/landing-v2/v2-offer-data";
@@ -24,7 +25,8 @@ export function CheckoutOrderSummary({
   className,
 }: CheckoutOrderSummaryProps) {
   const planData = plans[plan];
-  const showBonuses = plan === "completo";
+  const hasUpgrade = selectedBumps.includes(UPGRADE_BUMP_ID);
+  const showBonuses = plan === "completo" || hasUpgrade;
   const selected = checkoutBumps.filter((b) => selectedBumps.includes(b.id));
 
   return (
