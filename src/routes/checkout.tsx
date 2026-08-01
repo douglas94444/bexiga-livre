@@ -537,6 +537,8 @@ function CheckoutPage() {
                   publicKey={publicKey}
                   amount={total}
                   cpfDigits={digitsOnly(cpf)}
+                  status={cardStatus}
+                  onRetry={() => void retryConfig()}
                   tokenizerRef={tokenizerRef}
                 />
               )}
