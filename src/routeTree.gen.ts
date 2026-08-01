@@ -15,6 +15,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as V1RouteImport } from './routes/v1'
 import { Route as V2RouteImport } from './routes/v2'
+import { Route as ApiPublicCheckoutMetricsRouteImport } from './routes/api/public/checkout-metrics'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago-webhook'
 
@@ -48,6 +49,12 @@ const V2Route = V2RouteImport.update({
   path: '/v2',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCheckoutMetricsRoute =
+  ApiPublicCheckoutMetricsRouteImport.update({
+    id: '/api/public/checkout-metrics',
+    path: '/api/public/checkout-metrics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
   id: '/api/public/health',
   path: '/api/public/health',
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/checkout-metrics': typeof ApiPublicCheckoutMetricsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/checkout-metrics': typeof ApiPublicCheckoutMetricsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -88,6 +97,7 @@ export interface FileRoutesById {
   '/obrigado': typeof ObrigadoRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
+  '/api/public/checkout-metrics': typeof ApiPublicCheckoutMetricsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/obrigado'
     | '/v1'
     | '/v2'
+    | '/api/public/checkout-metrics'
     | '/api/public/health'
     | '/api/public/mercadopago-webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '/obrigado'
     | '/v1'
     | '/v2'
+    | '/api/public/checkout-metrics'
     | '/api/public/health'
     | '/api/public/mercadopago-webhook'
   id:
@@ -120,6 +132,7 @@ export interface FileRouteTypes {
     | '/obrigado'
     | '/v1'
     | '/v2'
+    | '/api/public/checkout-metrics'
     | '/api/public/health'
     | '/api/public/mercadopago-webhook'
   fileRoutesById: FileRoutesById
@@ -131,6 +144,7 @@ export interface RootRouteChildren {
   ObrigadoRoute: typeof ObrigadoRoute
   V1Route: typeof V1Route
   V2Route: typeof V2Route
+  ApiPublicCheckoutMetricsRoute: typeof ApiPublicCheckoutMetricsRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -179,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/checkout-metrics': {
+      id: '/api/public/checkout-metrics'
+      path: '/api/public/checkout-metrics'
+      fullPath: '/api/public/checkout-metrics'
+      preLoaderRoute: typeof ApiPublicCheckoutMetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/health': {
       id: '/api/public/health'
       path: '/api/public/health'
@@ -203,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ObrigadoRoute: ObrigadoRoute,
   V1Route: V1Route,
   V2Route: V2Route,
+  ApiPublicCheckoutMetricsRoute: ApiPublicCheckoutMetricsRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
