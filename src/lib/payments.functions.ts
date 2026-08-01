@@ -138,6 +138,28 @@ export const createCardPayment = createServerFn({ method: "POST" })
       },
     );
 
+    if (!approved) {
+      try {
+        const { sendPaymentAlert } = await import("@/lib/alerting.server");
+        await sendPaymentAlert({
+          level: "warning",
+          title: "Pagamento com cartão recusado",
+          message: `O pedido foi recusado pelo Mercado Pago (${payment.status_detail}).`,
+          context: {
+            order_id: orderId ?? "não gravado",
+            payment_id: String(payment.id),
+            status_detail: payment.status_detail,
+            status: payment.status,
+            valor: amount,
+            email: data.email,
+            name: data.name,
+          },
+        });
+      } catch (alertError) {
+        console.error("[alerting] falha ao enviar alerta de recusa", alertError);
+      }
+    }
+
     return {
       ok: true,
       paymentId: String(payment.id),
@@ -146,6 +168,7 @@ export const createCardPayment = createServerFn({ method: "POST" })
       approved,
     };
   });
+
 
 export const getPaymentStatus = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => paymentIdSchema.parse(input))
