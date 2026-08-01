@@ -27,7 +27,10 @@ export const Route = createFileRoute("/api/public/health")({
         // `safeSupabaseAuth` segue sem token em vez de derrubar o pagamento.
         try {
           const { safeSupabaseAuth } = await import("@/lib/supabase-auth-safe");
-          checks.checkout_middleware = safeSupabaseAuth ? "ok" : "erro";
+          const { isGeneratedAttacherRegistered } = await import("@/lib/start-middleware");
+          await import("@/start");
+          checks.checkout_middleware =
+            safeSupabaseAuth && !isGeneratedAttacherRegistered() ? "ok" : "erro";
         } catch {
           checks.checkout_middleware = "erro";
         }
