@@ -363,8 +363,11 @@ function CheckoutPage() {
       const result = await payWithCard({ data: { ...payer, ...card } });
 
       if (result.approved) {
+        setCardSuccess(true);
         toast.success("Pagamento aprovado!");
-        goToThankYou();
+        setTimeout(() => {
+          goToThankYou();
+        }, 1800);
         return;
       }
 
