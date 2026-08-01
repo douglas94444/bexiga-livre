@@ -77,6 +77,13 @@ export const Route = createFileRoute("/checkout")({
     plan: search.plan === "basico" ? "basico" : "completo",
     bumps: serializeBumpIds(parseBumpIds(search.bumps ?? search.bump)),
   }),
+  loader: async () => {
+    try {
+      return await getPaymentConfig();
+    } catch {
+      return { publicKey: "", available: false };
+    }
+  },
   component: CheckoutPage,
   head: () => ({
     meta: [
