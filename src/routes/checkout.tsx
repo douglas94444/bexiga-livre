@@ -111,7 +111,11 @@ function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
-  const [publicKey, setPublicKey] = useState("");
+  const initialConfig = Route.useLoaderData();
+  const [publicKey, setPublicKey] = useState(initialConfig.publicKey);
+  const [cardStatus, setCardStatus] = useState<
+    "loading" | "ready" | "unavailable"
+  >(initialConfig.publicKey ? "ready" : "loading");
   const [pix, setPix] = useState<PixPaymentResult | null>(null);
   const [checkingPix, setCheckingPix] = useState(false);
   const tokenizerRef = useRef<(() => Promise<CardTokenPayload>) | null>(null);
@@ -121,17 +125,29 @@ function CheckoutPage() {
   const payWithCard = useServerFn(createCardPayment);
   const checkStatus = useServerFn(getPaymentStatus);
 
-  useEffect(() => {
-    let cancelled = false;
-    void loadConfig()
-      .then((config) => {
-        if (!cancelled) setPublicKey(config.publicKey);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
+  const retryConfig = useCallback(async () => {
+    setCardStatus("loading");
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const config = await loadConfig();
+        if (config.publicKey) {
+          setPublicKey(config.publicKey);
+          setCardStatus("ready");
+          return;
+        }
+        setCardStatus("unavailable");
+        return;
+      } catch {
+        if (attempt === 1) setCardStatus("unavailable");
+      }
+    }
   }, [loadConfig]);
+
+  useEffect(() => {
+    if (publicKey) return;
+    void retryConfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setSelectedBumps(initialIds);
