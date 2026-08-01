@@ -700,9 +700,16 @@ function CheckoutPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-8 text-base font-semibold uppercase tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 sm:text-lg"
+                className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand px-8 text-base font-semibold uppercase tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 sm:text-lg"
               >
-                {submitting ? "Preparando pagamento…" : "Finalizar pagamento"}
+                {submitting ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    <span>Processando…</span>
+                  </>
+                ) : (
+                  "Finalizar pagamento"
+                )}
               </button>
 
               {isDev ? (
