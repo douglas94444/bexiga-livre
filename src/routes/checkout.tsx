@@ -92,6 +92,7 @@ export const Route = createFileRoute("/checkout")({
     }
   },
   component: CheckoutPage,
+  errorComponent: CheckoutErrorComponent,
   head: () => ({
     meta: [
       { title: `Finalizar acesso | ${PRODUCT_NAME}` },
@@ -103,6 +104,33 @@ export const Route = createFileRoute("/checkout")({
     ],
   }),
 });
+
+function CheckoutErrorComponent({ error }: { error: Error }) {
+  useEffect(() => {
+    console.error("[checkout] erro na página", error);
+  }, [error]);
+
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-6">
+      <div className="max-w-md text-center">
+        <h1 className="text-2xl font-semibold text-foreground">
+          Não conseguimos carregar o checkout
+        </h1>
+        <p className="mt-3 text-muted-foreground">
+          Foi uma falha momentânea. Recarregue a página para continuar sua compra
+          com segurança.
+        </p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="mt-6 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    </main>
+  );
+}
 
 function CheckoutPage() {
   const navigate = useNavigate();

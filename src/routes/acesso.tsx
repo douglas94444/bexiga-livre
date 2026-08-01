@@ -205,6 +205,7 @@ function AcessoPage() {
           </Link>
           <Link
             to="/checkout"
+            search={{ plan: "completo", bumps: "" }}
             className="text-muted-foreground underline-offset-2 hover:underline"
           >
             Ainda não comprei
