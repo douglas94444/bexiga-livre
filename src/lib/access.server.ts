@@ -1,4 +1,4 @@
-import { UPGRADE_BUMP_ID, isCheckoutBumpId, type CheckoutBumpId } from "@/components/landing/offer-data";
+import { isCheckoutBumpId, type CheckoutBumpId } from "@/components/landing/offer-data";
 
 const PAID_STATUSES = ["aprovado", "approved", "paid"];
 
