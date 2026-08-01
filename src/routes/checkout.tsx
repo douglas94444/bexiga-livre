@@ -436,6 +436,8 @@ function CheckoutPage() {
                 Voltar e alterar os dados
               </button>
             </div>
+          ) : cardSuccess ? (
+            <CardSuccessView />
           ) : (
           <form onSubmit={onSubmit} className="space-y-6">
             <section className="rounded-2xl border border-border bg-background p-5 sm:p-6">
