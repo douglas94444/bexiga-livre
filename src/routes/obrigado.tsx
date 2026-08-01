@@ -48,7 +48,7 @@ function ObrigadoPage() {
   const { plan, bumps: bumpsParam } = Route.useSearch();
   const bumpIds = useMemo(() => parseBumpIds(bumpsParam), [bumpsParam]);
   const selectedBumps = checkoutBumps.filter((b) => bumpIds.includes(b.id));
-  const showFull = plan === "completo";
+  const showFull = plan === "completo" || bumpIds.includes(UPGRADE_BUMP_ID);
   /** Valor do pedido recalculado — nunca confiar em ?amount= da URL. */
   const purchaseValue = planTotal(plan, bumpIds);
 
