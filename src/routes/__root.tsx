@@ -16,7 +16,6 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   SITE_NAME,
-  absoluteOgImage,
   absoluteUrl,
 } from "@/lib/seo";
 import appCss from "../styles.css?url";
