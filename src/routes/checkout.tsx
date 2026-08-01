@@ -1,7 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, CreditCard, Lock, ShieldCheck, User } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { CardForm, type CardTokenPayload } from "@/components/checkout/CardForm";
 import { PixPanel } from "@/components/checkout/PixPanel";
 import { CheckoutHero } from "@/components/checkout/CheckoutHero";
