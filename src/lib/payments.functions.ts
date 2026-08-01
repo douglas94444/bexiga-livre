@@ -9,7 +9,8 @@ import type { CardPaymentResult, PixPaymentResult } from "@/lib/payment-types";
 export const getPaymentConfig = createServerFn({ method: "GET" }).handler(
   async () => {
     const { mpPublicKey } = await import("@/lib/payments.server");
-    return { publicKey: mpPublicKey() };
+    const publicKey = mpPublicKey();
+    return { publicKey, available: publicKey.length > 0 };
   },
 );
 
