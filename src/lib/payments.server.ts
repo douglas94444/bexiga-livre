@@ -58,73 +58,73 @@ export async function mpFetch<T>(
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
-        const response = await fetch(`${MP_API}${path}`, {
-          ...rest,
-          headers,
-          signal: AbortSignal.timeout(MP_TIMEOUT_MS),
-        });
-        const text = await response.text();
-        const json = text ? (JSON.parse(text) as unknown) : {};
+      const response = await fetch(`${MP_API}${path}`, {
+        ...rest,
+        headers,
+        signal: AbortSignal.timeout(MP_TIMEOUT_MS),
+      });
+      const text = await response.text();
+      const json = text ? (JSON.parse(text) as unknown) : {};
 
-        if (!response.ok) {
-          const err = json as MpError;
-          const detail = err.cause?.[0]?.description ?? err.message ?? response.statusText;
-          console.error("[mercadopago] erro", response.status, detail);
+      if (!response.ok) {
+        const err = json as MpError;
+        const detail = err.cause?.[0]?.description ?? err.message ?? response.statusText;
+        console.error("[mercadopago] erro", response.status, detail);
 
-          // 429/5xx são instabilidades temporárias: vale repetir.
-          if (attempt < maxAttempts && (response.status === 429 || response.status >= 500)) {
-            await sleep(400 * attempt);
-            continue;
-          }
-          throw new Error(detail || "Falha ao processar o pagamento.");
-        }
-        return json as T;
-      } catch (error) {
-        lastError = error;
-        const isNetwork =
-          error instanceof DOMException ||
-          (error instanceof TypeError && /fetch|network/i.test(error.message));
-        if (attempt < maxAttempts && isNetwork) {
-          console.error(`[mercadopago] falha de rede (tentativa ${attempt})`, error);
+        // 429/5xx são instabilidades temporárias: vale repetir.
+        if (attempt < maxAttempts && (response.status === 429 || response.status >= 500)) {
           await sleep(400 * attempt);
           continue;
         }
-        throw error instanceof Error
-          ? error
-          : new Error("Falha ao processar o pagamento.");
+        throw new Error(detail || "Falha ao processar o pagamento.");
       }
+      return json as T;
+    } catch (error) {
+      lastError = error;
+      const isNetwork =
+        error instanceof DOMException ||
+        (error instanceof TypeError && /fetch|network/i.test(error.message));
+      if (attempt < maxAttempts && isNetwork) {
+        console.error(`[mercadopago] falha de rede (tentativa ${attempt})`, error);
+        await sleep(400 * attempt);
+        continue;
+      }
+      throw error instanceof Error
+        ? error
+        : new Error("Falha ao processar o pagamento.");
     }
+  }
 
-    // Todas as tentativas esgotadas: alerta o time de operações.
-    void alertMpFailure({
-      path,
-      status: lastError instanceof Error && /status/i.test(lastError.message) ? undefined : undefined,
-      detail: lastError instanceof Error ? lastError.message : "Falha desconhecida",
+  // Todas as tentativas esgotadas: alerta o time de operações.
+  void alertMpFailure({
+    path,
+    detail: lastError instanceof Error ? lastError.message : "Falha desconhecida",
+  });
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Falha ao processar o pagamento.");
+}
+
+/** Envia alerta quando a comunicação com Mercado Pago falha de forma crítica. */
+export async function alertMpFailure(context: { path: string; detail?: string; status?: number }) {
+  try {
+    const { sendPaymentAlert } = await import("@/lib/alerting.server");
+    await sendPaymentAlert({
+      level: "critical",
+      title: "Falha de comunicação com Mercado Pago",
+      message: "O checkout não conseguiu se comunicar com o Mercado Pago. Verifique as credenciais e a disponibilidade da API.",
+      context: {
+        endpoint: context.path,
+        status: context.status ?? "network",
+        detalhe: context.detail ?? "Sem detalhe adicional",
+      },
     });
-
-    throw lastError instanceof Error
-      ? lastError
-      : new Error("Falha ao processar o pagamento.");
+  } catch (alertError) {
+    console.error("[alerting] falha ao enviar alerta de MP", alertError);
   }
+}
 
-  /** Envia alerta quando a comunicação com Mercado Pago falha de forma crítica. */
-  export async function alertMpFailure(context: { path: string; detail?: string; status?: number }) {
-    try {
-      const { sendPaymentAlert } = await import("@/lib/alerting.server");
-      await sendPaymentAlert({
-        level: "critical",
-        title: "Falha de comunicação com Mercado Pago",
-        message: "O checkout não conseguiu se comunicar com o Mercado Pago. Verifique as credenciais e a disponibilidade da API.",
-        context: {
-          endpoint: context.path,
-          status: context.status ?? "network",
-          detalhe: context.detail ?? "Sem detalhe adicional",
-        },
-      });
-    } catch (alertError) {
-      console.error("[alerting] falha ao enviar alerta de MP", alertError);
-    }
-  }
 
 
 
