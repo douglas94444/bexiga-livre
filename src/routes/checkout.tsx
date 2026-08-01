@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, CreditCard, Lock, ShieldCheck, User } from "lucide-react";
+import { Check, CreditCard, Loader2, Lock, ShieldCheck, User } from "lucide-react";
 import {
   useCallback,
   useEffect,
