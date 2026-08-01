@@ -315,6 +315,13 @@ function CheckoutPage() {
         return;
       }
 
+      if (cardStatus !== "ready" || !publicKey) {
+        toast.error(
+          "Pagamento com cartão indisponível no momento. Pague no PIX para liberar o acesso na hora.",
+        );
+        return;
+      }
+
       if (!tokenizerRef.current) {
         toast.error("Preencha os dados do cartão.");
         return;
