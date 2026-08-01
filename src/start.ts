@@ -2,14 +2,14 @@ import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/r
 
 import { renderErrorPage } from "./lib/error-page";
 import { withSecurityHeaders } from "./lib/security-headers";
-import { safeSupabaseAuth } from "./lib/supabase-auth-safe";
-import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
+import { sanitizeFunctionMiddleware } from "./lib/start-middleware";
 // NÃO registrar `attachSupabaseAuth` (@/integrations/supabase/auth-attacher).
 // O app não usa login: nenhum server fn exige autenticação. O middleware
 // gerado inicializa o cliente do backend no navegador e quebra TODAS as
 // chamadas de servidor quando as envs públicas faltam no build publicado
 // (checkout ficava "indisponível"). Use sempre `safeSupabaseAuth`, que faz o
-// mesmo de forma tolerante a falhas.
+// mesmo de forma tolerante a falhas. `sanitizeFunctionMiddleware` remove o
+// middleware gerado automaticamente caso ele volte a ser adicionado aqui.
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
@@ -36,6 +36,6 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [attachSupabaseAuth, safeSupabaseAuth],
+  functionMiddleware: sanitizeFunctionMiddleware([]) as never,
   requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));
