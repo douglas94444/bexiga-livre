@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AcessoRouteImport } from './routes/acesso'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as V1RouteImport } from './routes/v1'
 import { Route as V2RouteImport } from './routes/v2'
 import { Route as AdminPedidosRouteImport } from './routes/admin/pedidos'
@@ -38,6 +39,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const ObrigadoRoute = ObrigadoRouteImport.update({
   id: '/obrigado',
   path: '/obrigado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const V1Route = V1RouteImport.update({
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/acesso': typeof AcessoRoute
   '/checkout': typeof CheckoutRoute
   '/obrigado': typeof ObrigadoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/acesso': typeof AcessoRoute
   '/checkout': typeof CheckoutRoute
   '/obrigado': typeof ObrigadoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/acesso': typeof AcessoRoute
   '/checkout': typeof CheckoutRoute
   '/obrigado': typeof ObrigadoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/v1': typeof V1Route
   '/v2': typeof V2Route
   '/admin/pedidos': typeof AdminPedidosRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/acesso'
     | '/checkout'
     | '/obrigado'
+    | '/sitemap.xml'
     | '/v1'
     | '/v2'
     | '/admin/pedidos'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/acesso'
     | '/checkout'
     | '/obrigado'
+    | '/sitemap.xml'
     | '/v1'
     | '/v2'
     | '/admin/pedidos'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/acesso'
     | '/checkout'
     | '/obrigado'
+    | '/sitemap.xml'
     | '/v1'
     | '/v2'
     | '/admin/pedidos'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   AcessoRoute: typeof AcessoRoute
   CheckoutRoute: typeof CheckoutRoute
   ObrigadoRoute: typeof ObrigadoRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   V1Route: typeof V1Route
   V2Route: typeof V2Route
   AdminPedidosRoute: typeof AdminPedidosRoute
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/obrigado'
       fullPath: '/obrigado'
       preLoaderRoute: typeof ObrigadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/v1': {
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   AcessoRoute: AcessoRoute,
   CheckoutRoute: CheckoutRoute,
   ObrigadoRoute: ObrigadoRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   V1Route: V1Route,
   V2Route: V2Route,
   AdminPedidosRoute: AdminPedidosRoute,

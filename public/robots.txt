@@ -21,3 +21,7 @@ Allow: /
 Disallow: /checkout
 Disallow: /obrigado
 Disallow: /v1
+Disallow: /acesso
+Disallow: /admin
+
+Sitemap: https://protocolobexigablindada.lovable.app/sitemap.xml
