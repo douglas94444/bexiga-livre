@@ -361,7 +361,7 @@ function CheckoutPage() {
       };
 
       if (parsed.data.payMethod === "pix") {
-        const result = await startPix({ data: payer });
+        const result = await callSafe(() => startPix({ data: payer }));
         setPix(result);
         toast.success("PIX gerado — pague para liberar o acesso.");
         return;
@@ -380,7 +380,9 @@ function CheckoutPage() {
       }
 
       const card = await tokenizerRef.current();
-      const result = await payWithCard({ data: { ...payer, ...card } });
+      const result = await callSafe(() =>
+        payWithCard({ data: { ...payer, ...card } }),
+      );
 
       if (result.approved) {
         setCardSuccess(true);

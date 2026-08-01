@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { startInstance } from "@/start";
 
 type CheckState = "ok" | "erro";
 
@@ -12,10 +13,27 @@ export const Route = createFileRoute("/api/public/health")({
       GET: async () => {
         const checks: Record<string, CheckState> = {
           app: "ok",
+          checkout_middleware: "ok",
           mercadopago: process.env.MERCADOPAGO_ACCESS_TOKEN ? "ok" : "erro",
           mercadopago_public_key: process.env.MERCADOPAGO_PUBLIC_KEY ? "ok" : "erro",
           banco: "erro",
         };
+
+        // Guarda contra regressão: o middleware gerado do backend não pode
+        // voltar a ser registrado, senão o checkout quebra no site publicado.
+        try {
+          const options = (startInstance as unknown as {
+            getOptions?: () => { functionMiddleware?: unknown[] };
+          }).getOptions?.();
+          const registered = options?.functionMiddleware ?? [];
+          const unsafe = registered.some((mw) =>
+            String((mw as { options?: { client?: unknown } })?.options?.client ?? "")
+              .includes("auth-attacher"),
+          );
+          if (unsafe) checks.checkout_middleware = "erro";
+        } catch {
+          // inspeção indisponível: não derruba o health check
+        }
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
