@@ -92,6 +92,7 @@ export const Route = createFileRoute("/checkout")({
     }
   },
   component: CheckoutPage,
+  errorComponent: CheckoutErrorComponent,
   head: () => ({
     meta: [
       { title: `Finalizar acesso | ${PRODUCT_NAME}` },
