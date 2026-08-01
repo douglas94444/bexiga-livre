@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, CreditCard, Lock, ShieldCheck, User } from "lucide-react";
+import { Check, CreditCard, Loader2, Lock, ShieldCheck, User } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -132,6 +132,26 @@ function CheckoutErrorComponent({ error }: { error: Error }) {
   );
 }
 
+function CardSuccessView() {
+  return (
+    <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-border bg-background p-8 text-center">
+      <div className="grid size-16 place-items-center rounded-full bg-brand text-primary-foreground">
+        <Check className="size-8" strokeWidth={2.5} />
+      </div>
+      <h2 className="mt-5 text-xl font-semibold tracking-tight sm:text-2xl">
+        Pagamento aprovado!
+      </h2>
+      <p className="mt-2 text-muted-foreground">
+        Vamos liberar seu acesso agora.
+      </p>
+      <p className="mt-5 inline-flex items-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" />
+        Redirecionando…
+      </p>
+    </div>
+  );
+}
+
 function CheckoutPage() {
   const navigate = useNavigate();
   const { plan, bumps: bumpsParam }: CheckoutSearch = Route.useSearch();
@@ -144,6 +164,7 @@ function CheckoutPage() {
   const [selectedBumps, setSelectedBumps] = useState<CheckoutBumpId[]>(initialIds);
   const [payMethod, setPayMethod] = useState<PayMethod>("pix");
   const [submitting, setSubmitting] = useState(false);
+  const [cardSuccess, setCardSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
   const initialConfig = Route.useLoaderData() ?? {
@@ -362,8 +383,11 @@ function CheckoutPage() {
       const result = await payWithCard({ data: { ...payer, ...card } });
 
       if (result.approved) {
+        setCardSuccess(true);
         toast.success("Pagamento aprovado!");
-        goToThankYou();
+        setTimeout(() => {
+          goToThankYou();
+        }, 1800);
         return;
       }
 
@@ -412,6 +436,8 @@ function CheckoutPage() {
                 Voltar e alterar os dados
               </button>
             </div>
+          ) : cardSuccess ? (
+            <CardSuccessView />
           ) : (
           <form onSubmit={onSubmit} className="space-y-6">
             <section className="rounded-2xl border border-border bg-background p-5 sm:p-6">
@@ -674,9 +700,16 @@ function CheckoutPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-8 text-base font-semibold uppercase tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 sm:text-lg"
+                className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-brand px-8 text-base font-semibold uppercase tracking-tight text-primary-foreground shadow-[0_10px_30px_-12px_oklch(0.49_0.089_181/0.55)] transition-colors duration-200 hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 sm:text-lg"
               >
-                {submitting ? "Preparando pagamento…" : "Finalizar pagamento"}
+                {submitting ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    <span>Processando…</span>
+                  </>
+                ) : (
+                  "Finalizar pagamento"
+                )}
               </button>
 
               {isDev ? (
