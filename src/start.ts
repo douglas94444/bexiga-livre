@@ -3,6 +3,7 @@ import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/r
 import { renderErrorPage } from "./lib/error-page";
 import { withSecurityHeaders } from "./lib/security-headers";
 import { safeSupabaseAuth } from "./lib/supabase-auth-safe";
+import { attachSupabaseAuth } from "@/integrations/supabase/auth-attacher";
 // NÃO registrar `attachSupabaseAuth` (@/integrations/supabase/auth-attacher).
 // O app não usa login: nenhum server fn exige autenticação. O middleware
 // gerado inicializa o cliente do backend no navegador e quebra TODAS as
@@ -35,6 +36,6 @@ const csrfMiddleware = createCsrfMiddleware({
 });
 
 export const startInstance = createStart(() => ({
-  functionMiddleware: [safeSupabaseAuth],
+  functionMiddleware: [attachSupabaseAuth, safeSupabaseAuth],
   requestMiddleware: [errorMiddleware, csrfMiddleware],
 }));
