@@ -19,6 +19,8 @@ type Props = {
   publicKey: string;
   amount: number;
   cpfDigits: string;
+  status: "loading" | "ready" | "unavailable";
+  onRetry: () => void;
   /** Preenchido pelo formulário; o checkout chama para gerar o token. */
   tokenizerRef: MutableRefObject<(() => Promise<CardTokenPayload>) | null>;
 };
@@ -40,7 +42,14 @@ function formatExpiry(value: string) {
   return `${d.slice(0, 2)}/${d.slice(2)}`;
 }
 
-export function CardForm({ publicKey, amount, cpfDigits, tokenizerRef }: Props) {
+export function CardForm({
+  publicKey,
+  amount,
+  cpfDigits,
+  status,
+  onRetry,
+  tokenizerRef,
+}: Props) {
   const [number, setNumber] = useState("");
   const [holder, setHolder] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -129,9 +138,35 @@ export function CardForm({ publicKey, amount, cpfDigits, tokenizerRef }: Props) 
     tokenizerRef,
   ]);
 
-  useEffect(() => {
-    if (!publicKey) setSdkError("Pagamento com cartão indisponível no momento.");
-  }, [publicKey]);
+  if (status === "loading") {
+    return (
+      <div className="mt-5 grid gap-4 sm:grid-cols-2" aria-busy="true">
+        <div className="h-12 rounded-xl bg-muted animate-pulse sm:col-span-2" />
+        <div className="h-12 rounded-xl bg-muted animate-pulse sm:col-span-2" />
+        <div className="h-12 rounded-xl bg-muted animate-pulse" />
+        <div className="h-12 rounded-xl bg-muted animate-pulse" />
+        <div className="h-12 rounded-xl bg-muted animate-pulse sm:col-span-2" />
+      </div>
+    );
+  }
+
+  if (status === "unavailable") {
+    return (
+      <div className="mt-5 rounded-xl border border-border bg-muted/40 p-4 text-sm">
+        <p className="text-muted-foreground">
+          Não conseguimos carregar o pagamento com cartão agora. Tente de novo ou
+          pague no PIX (liberação imediata).
+        </p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-3 inline-flex min-h-10 items-center justify-center rounded-lg border border-brand px-4 text-sm font-semibold text-brand"
+        >
+          Tentar de novo
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-5 grid gap-4 sm:grid-cols-2">
