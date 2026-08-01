@@ -161,6 +161,8 @@ export const checkoutBumps: readonly {
     text: "PAC, tipos de produto, como ler o rótulo, cápsula vs. suco, mitos e checklist de compra — o conhecimento de insider que o funil já validou.",
     price: 17.9,
     compareAt: 47,
+    fileName: "guia-cranberry.pdf",
+    path: "/guia-cranberry.pdf",
   },
 ] as const;
 
