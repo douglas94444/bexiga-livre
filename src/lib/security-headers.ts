@@ -11,14 +11,14 @@ const SECURITY_HEADERS: Record<string, string> = {
     "default-src 'self'",
     "base-uri 'self'",
     "frame-ancestors 'none'",
-    "form-action 'self'",
+    "form-action 'self' https://*.mercadopago.com https://*.mercadolibre.com https://*.mercadolivre.com",
     "object-src 'none'",
     "script-src 'self' 'unsafe-inline' https://connect.facebook.net https://sdk.mercadopago.com https://http2.mlstatic.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com https://cdn.gpteng.co data:",
     "img-src 'self' data: blob: https:",
-    "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://api.mercadopago.com https://*.mercadopago.com https://*.mercadolibre.com https://www.mercadolibre.com",
-    "frame-src 'self' https://sdk.mercadopago.com https://*.mercadopago.com https://*.mercadolibre.com https://www.mercadolibre.com",
+    "connect-src 'self' https://www.facebook.com https://connect.facebook.net https://*.facebook.com https://api.mercadopago.com https://*.mercadopago.com https://*.mercadolibre.com https://*.mercadolivre.com",
+    "frame-src 'self' https://sdk.mercadopago.com https://http2.mlstatic.com https://*.mercadopago.com https://*.mercadolibre.com https://*.mercadolivre.com",
   ].join("; "),
 };
 
