@@ -68,10 +68,8 @@ export async function findPaidOrder(
 
   return {
     plan: match.plan === "basico" ? "basico" : "completo",
-    bumps: bumps.length > 0 || match.plan === "basico" ? bumps : bumps,
+    bumps,
     totalCents: match.total_cents ?? 0,
     paidAt: match.paid_at ?? null,
   };
 }
-
-export { UPGRADE_BUMP_ID };
