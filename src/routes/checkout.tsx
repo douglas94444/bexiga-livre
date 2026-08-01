@@ -144,6 +144,7 @@ function CheckoutPage() {
   const [selectedBumps, setSelectedBumps] = useState<CheckoutBumpId[]>(initialIds);
   const [payMethod, setPayMethod] = useState<PayMethod>("pix");
   const [submitting, setSubmitting] = useState(false);
+  const [cardSuccess, setCardSuccess] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
   const initialConfig = Route.useLoaderData() ?? {
