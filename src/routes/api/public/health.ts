@@ -12,10 +12,21 @@ export const Route = createFileRoute("/api/public/health")({
       GET: async () => {
         const checks: Record<string, CheckState> = {
           app: "ok",
+          checkout_middleware: "ok",
           mercadopago: process.env.MERCADOPAGO_ACCESS_TOKEN ? "ok" : "erro",
           mercadopago_public_key: process.env.MERCADOPAGO_PUBLIC_KEY ? "ok" : "erro",
           banco: "erro",
         };
+
+        // Guarda contra regressão: o middleware do checkout precisa ser o
+        // tolerante a falhas. Se o cliente do navegador não puder ser criado,
+        // `safeSupabaseAuth` segue sem token em vez de derrubar o pagamento.
+        try {
+          const { safeSupabaseAuth } = await import("@/lib/supabase-auth-safe");
+          checks.checkout_middleware = safeSupabaseAuth ? "ok" : "erro";
+        } catch {
+          checks.checkout_middleware = "erro";
+        }
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
