@@ -132,6 +132,26 @@ function CheckoutErrorComponent({ error }: { error: Error }) {
   );
 }
 
+function CardSuccessView() {
+  return (
+    <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-border bg-background p-8 text-center">
+      <div className="grid size-16 place-items-center rounded-full bg-brand text-primary-foreground">
+        <Check className="size-8" strokeWidth={2.5} />
+      </div>
+      <h2 className="mt-5 text-xl font-semibold tracking-tight sm:text-2xl">
+        Pagamento aprovado!
+      </h2>
+      <p className="mt-2 text-muted-foreground">
+        Vamos liberar seu acesso agora.
+      </p>
+      <p className="mt-5 inline-flex items-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="size-4 animate-spin" />
+        Redirecionando…
+      </p>
+    </div>
+  );
+}
+
 function CheckoutPage() {
   const navigate = useNavigate();
   const { plan, bumps: bumpsParam }: CheckoutSearch = Route.useSearch();
