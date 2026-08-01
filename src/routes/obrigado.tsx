@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import {
   bonuses,
   checkoutBumps,
+  UPGRADE_BUMP_ID,
   formatBRL,
   mainDeliverables,
   parseBumpIds,
