@@ -95,10 +95,38 @@ export async function mpFetch<T>(
     }
   }
 
+  // Todas as tentativas esgotadas: alerta o time de operações.
+  void alertMpFailure({
+    path,
+    detail: lastError instanceof Error ? lastError.message : "Falha desconhecida",
+  });
+
   throw lastError instanceof Error
     ? lastError
     : new Error("Falha ao processar o pagamento.");
 }
+
+/** Envia alerta quando a comunicação com Mercado Pago falha de forma crítica. */
+export async function alertMpFailure(context: { path: string; detail?: string; status?: number }) {
+  try {
+    const { sendPaymentAlert } = await import("@/lib/alerting.server");
+    await sendPaymentAlert({
+      level: "critical",
+      title: "Falha de comunicação com Mercado Pago",
+      message: "O checkout não conseguiu se comunicar com o Mercado Pago. Verifique as credenciais e a disponibilidade da API.",
+      context: {
+        endpoint: context.path,
+        status: context.status ?? "network",
+        detalhe: context.detail ?? "Sem detalhe adicional",
+      },
+    });
+  } catch (alertError) {
+    console.error("[alerting] falha ao enviar alerta de MP", alertError);
+  }
+}
+
+
+
 
 /** Valor autoritativo, sempre recalculado no servidor. */
 export function amountFor(plan: PlanId, bumpIds: readonly CheckoutBumpId[]) {

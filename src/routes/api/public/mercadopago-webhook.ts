@@ -67,6 +67,7 @@ export const Route = createFileRoute("/api/public/mercadopago-webhook")({
           );
           const payment = await getMpPayment(dataId);
           const approved = payment.status === "approved";
+          const rejected = payment.status === "rejected" || payment.status === "cancelled";
 
           await updateOrder(
             {
@@ -82,12 +83,32 @@ export const Route = createFileRoute("/api/public/mercadopago-webhook")({
                 : null,
             },
           );
+
+          if (rejected) {
+            try {
+              const { sendPaymentAlert } = await import("@/lib/alerting.server");
+              await sendPaymentAlert({
+                level: "warning",
+                title: "Webhook: pagamento recusado/cancelado",
+                message: `Notificação do Mercado Pago indicou ${payment.status} (${payment.status_detail}).`,
+                context: {
+                  payment_id: String(payment.id),
+                  external_reference: payment.external_reference ?? "não vinculado",
+                  status_detail: payment.status_detail,
+                  status: payment.status,
+                },
+              });
+            } catch (alertError) {
+              console.error("[alerting] falha ao enviar alerta de webhook", alertError);
+            }
+          }
         } catch (error) {
           console.error("[mercadopago webhook] falha ao processar", error);
           return new Response("error", { status: 500 });
         }
 
         return new Response("ok", { status: 200 });
+
       },
     },
   },
