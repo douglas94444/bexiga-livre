@@ -1,7 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, CreditCard, Lock, ShieldCheck, User } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { CardForm, type CardTokenPayload } from "@/components/checkout/CardForm";
 import { PixPanel } from "@/components/checkout/PixPanel";
 import { CheckoutHero } from "@/components/checkout/CheckoutHero";
@@ -77,6 +84,13 @@ export const Route = createFileRoute("/checkout")({
     plan: search.plan === "basico" ? "basico" : "completo",
     bumps: serializeBumpIds(parseBumpIds(search.bumps ?? search.bump)),
   }),
+  loader: async () => {
+    try {
+      return await getPaymentConfig();
+    } catch {
+      return { publicKey: "", available: false };
+    }
+  },
   component: CheckoutPage,
   head: () => ({
     meta: [
@@ -104,7 +118,14 @@ function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
-  const [publicKey, setPublicKey] = useState("");
+  const initialConfig = Route.useLoaderData() ?? {
+    publicKey: "",
+    available: false,
+  };
+  const [publicKey, setPublicKey] = useState(initialConfig.publicKey);
+  const [cardStatus, setCardStatus] = useState<
+    "loading" | "ready" | "unavailable"
+  >(initialConfig.publicKey ? "ready" : "loading");
   const [pix, setPix] = useState<PixPaymentResult | null>(null);
   const [checkingPix, setCheckingPix] = useState(false);
   const tokenizerRef = useRef<(() => Promise<CardTokenPayload>) | null>(null);
@@ -114,17 +135,29 @@ function CheckoutPage() {
   const payWithCard = useServerFn(createCardPayment);
   const checkStatus = useServerFn(getPaymentStatus);
 
-  useEffect(() => {
-    let cancelled = false;
-    void loadConfig()
-      .then((config) => {
-        if (!cancelled) setPublicKey(config.publicKey);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
+  const retryConfig = useCallback(async () => {
+    setCardStatus("loading");
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const config = await loadConfig();
+        if (config.publicKey) {
+          setPublicKey(config.publicKey);
+          setCardStatus("ready");
+          return;
+        }
+        setCardStatus("unavailable");
+        return;
+      } catch {
+        if (attempt === 1) setCardStatus("unavailable");
+      }
+    }
   }, [loadConfig]);
+
+  useEffect(() => {
+    if (publicKey) return;
+    void retryConfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setSelectedBumps(initialIds);
@@ -282,6 +315,13 @@ function CheckoutPage() {
         const result = await startPix({ data: payer });
         setPix(result);
         toast.success("PIX gerado — pague para liberar o acesso.");
+        return;
+      }
+
+      if (cardStatus !== "ready" || !publicKey) {
+        toast.error(
+          "Pagamento com cartão indisponível no momento. Pague no PIX para liberar o acesso na hora.",
+        );
         return;
       }
 
@@ -507,6 +547,8 @@ function CheckoutPage() {
                   publicKey={publicKey}
                   amount={total}
                   cpfDigits={digitsOnly(cpf)}
+                  status={cardStatus}
+                  onRetry={() => void retryConfig()}
                   tokenizerRef={tokenizerRef}
                 />
               )}
