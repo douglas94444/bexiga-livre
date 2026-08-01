@@ -111,6 +111,11 @@ function CheckoutPage() {
   const initialIds = useMemo(() => parseBumpIds(bumpsParam), [bumpsParam]);
 
   const [name, setName] = useState("");
+  const navigate = useNavigate();
+  const { plan, bumps: bumpsParam }: CheckoutSearch = Route.useSearch();
+  const initialIds = useMemo(() => parseBumpIds(bumpsParam), [bumpsParam]);
+
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
