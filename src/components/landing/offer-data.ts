@@ -82,9 +82,21 @@ export const bonuses = [
 
 export const bonusTotalValue = bonuses.reduce((sum, item) => sum + item.value, 0);
 
-export type CheckoutBumpId = "intimidade" | "calendario" | "cranberry";
+export type CheckoutBumpId =
+  | "intimidade"
+  | "calendario"
+  | "cranberry"
+  | "upgrade-completo";
 
-const CHECKOUT_BUMP_IDS = ["intimidade", "calendario", "cranberry"] as const satisfies readonly CheckoutBumpId[];
+const CHECKOUT_BUMP_IDS = [
+  "intimidade",
+  "calendario",
+  "cranberry",
+  "upgrade-completo",
+] as const satisfies readonly CheckoutBumpId[];
+
+/** Upgrade Essencial → Completo: não aparece na grade de bumps opcionais. */
+export const UPGRADE_BUMP_ID = "upgrade-completo" as const satisfies CheckoutBumpId;
 
 export function isCheckoutBumpId(value: string): value is CheckoutBumpId {
   return (CHECKOUT_BUMP_IDS as readonly string[]).includes(value);
@@ -105,7 +117,19 @@ export const checkoutBumps: readonly {
   /** PDF do bump — undefined até o arquivo ser enviado */
   fileName?: string;
   path?: string;
+  /** true quando é o upgrade do modal (não escolhível na grade) */
+  upgrade?: boolean;
 }[] = [
+  {
+    id: "upgrade-completo",
+    emoji: "🎁",
+    title: "Upgrade Protocolo Completo + 4 bônus",
+    pain: "",
+    text: "Guia Alimentar, Plano SOS Primeiros Sinais, Kit Viagem Sem Medo e Durma a Noite Toda.",
+    price: BUMP_PRICE,
+    compareAt: 168,
+    upgrade: true,
+  },
   {
     id: "intimidade",
     emoji: "❤️",

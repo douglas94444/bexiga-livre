@@ -14,6 +14,7 @@ import {
   upgradeBump,
   type PlanId,
 } from "./v2-offer-data";
+import { UPGRADE_BUMP_ID } from "@/components/landing/offer-data";
 import { V2Cta } from "./shared";
 import {
   planContentId,
@@ -52,16 +53,16 @@ export function useOrderBumpFunnel() {
   const navigate = useNavigate();
   const [modal, setModal] = useState<ModalKind>(null);
 
-  function goCheckout(plan: PlanId) {
+  function goCheckout(plan: PlanId, bumps = "") {
     setModal(null);
     trackAddToCart({
       content_name: planContentName(plan),
       content_ids: [planContentId(plan)],
-      value: plans[plan].price,
+      value: plans[plan].price + (bumps ? upgradeBump.price : 0),
     });
     void navigate({
       to: "/checkout",
-      search: { plan, bumps: "" },
+      search: { plan, bumps },
     });
   }
 
@@ -110,7 +111,10 @@ export function useOrderBumpFunnel() {
               </li>
             ))}
           </ul>
-          <V2Cta className="w-full" onClick={() => goCheckout("completo")}>
+          <V2Cta
+            className="w-full"
+            onClick={() => goCheckout("basico", UPGRADE_BUMP_ID)}
+          >
             SIM! QUERO O PROTOCOLO COMPLETO POR +{formatBRL(upgradeBump.price)}
           </V2Cta>
           <button

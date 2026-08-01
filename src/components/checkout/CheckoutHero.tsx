@@ -1,17 +1,23 @@
 import { Check, Shield } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import mockupBlindada from "@/assets/mockup-blindada-hero.png";
-import { PRODUCT_NAME } from "@/components/landing/offer-data";
+import {
+  PRODUCT_NAME,
+  UPGRADE_BUMP_ID,
+  type CheckoutBumpId,
+} from "@/components/landing/offer-data";
 import type { PlanId } from "@/components/landing-v2/v2-offer-data";
 import { plans } from "@/components/landing-v2/v2-offer-data";
 
 type CheckoutHeroProps = {
   plan: PlanId;
+  selectedBumps?: readonly CheckoutBumpId[];
 };
 
-export function CheckoutHero({ plan }: CheckoutHeroProps) {
+export function CheckoutHero({ plan, selectedBumps = [] }: CheckoutHeroProps) {
   const planData = plans[plan];
-  const showBonuses = plan === "completo";
+  const showBonuses =
+    plan === "completo" || selectedBumps.includes(UPGRADE_BUMP_ID);
 
   const bullets = [
     planData.name,

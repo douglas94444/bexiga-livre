@@ -315,7 +315,7 @@ function CheckoutPage() {
   return (
     <main className="min-h-screen bg-background">
       <UrgencyBar label="Oferta reservada — encerra em" />
-      <CheckoutHero plan={plan} />
+      <CheckoutHero plan={plan} selectedBumps={selectedBumps} />
       <CheckoutTrustBar />
 
       <div className="mx-auto max-w-6xl px-5 py-8 sm:px-6 sm:py-10">
@@ -518,7 +518,9 @@ function CheckoutPage() {
               </h2>
 
               <div className="mt-4 space-y-4">
-                {checkoutBumps.map((bump) => {
+                {checkoutBumps
+                  .filter((bump) => !bump.upgrade)
+                  .map((bump) => {
                   const selected = selectedBumps.includes(bump.id);
                   return (
                     <div
