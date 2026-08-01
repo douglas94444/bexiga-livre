@@ -11,12 +11,15 @@ export const DEFAULT_DESCRIPTION =
 /** Path resolvido pelo Vite (hash em produção). Prefira absoluteUrl() para OG. */
 export const OG_IMAGE_PATH = ogImageAsset;
 
+/** Domínio público do projeto (fallback quando VITE_SITE_URL não está definido). */
+export const SITE_URL = "https://protocolobexigablindada.lovable.app";
+
 export function siteOrigin(): string {
   const raw = import.meta.env.VITE_SITE_URL;
   if (typeof raw === "string" && raw.trim()) {
     return raw.trim().replace(/\/$/, "");
   }
-  return "";
+  return SITE_URL;
 }
 
 /** Monta URL absoluta quando VITE_SITE_URL existe; senão devolve o path. */
