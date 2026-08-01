@@ -164,11 +164,17 @@ export function createEventId(): string {
 }
 
 /** Atualiza Advanced Matching no Pixel (re-init com user_data). */
+let lastMatchingKey = "";
+
 export function setMetaUserData(input: MetaUserInput) {
   if (typeof window === "undefined" || typeof window.fbq !== "function") return;
   persistMetaUserData(input);
   if (!hasMatchableUserData(input)) return;
   const matching = buildAdvancedMatching(input);
+  // Evita "Duplicate Pixel ID" reinicializando só quando os dados mudam.
+  const key = JSON.stringify(matching);
+  if (key === lastMatchingKey) return;
+  lastMatchingKey = key;
   window.fbq("init", META_PIXEL_ID, matching);
 }
 
