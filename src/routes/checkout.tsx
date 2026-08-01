@@ -118,7 +118,10 @@ function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const isDev = import.meta.env.DEV;
-  const initialConfig = Route.useLoaderData();
+  const initialConfig = Route.useLoaderData() ?? {
+    publicKey: "",
+    available: false,
+  };
   const [publicKey, setPublicKey] = useState(initialConfig.publicKey);
   const [cardStatus, setCardStatus] = useState<
     "loading" | "ready" | "unavailable"
