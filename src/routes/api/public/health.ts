@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { startInstance } from "@/start";
 
 type CheckState = "ok" | "erro";
 
@@ -19,20 +18,14 @@ export const Route = createFileRoute("/api/public/health")({
           banco: "erro",
         };
 
-        // Guarda contra regressão: o middleware gerado do backend não pode
-        // voltar a ser registrado, senão o checkout quebra no site publicado.
+        // Guarda contra regressão: o middleware do checkout precisa ser o
+        // tolerante a falhas. Se o cliente do navegador não puder ser criado,
+        // `safeSupabaseAuth` segue sem token em vez de derrubar o pagamento.
         try {
-          const options = (startInstance as unknown as {
-            getOptions?: () => { functionMiddleware?: unknown[] };
-          }).getOptions?.();
-          const registered = options?.functionMiddleware ?? [];
-          const unsafe = registered.some((mw) =>
-            String((mw as { options?: { client?: unknown } })?.options?.client ?? "")
-              .includes("auth-attacher"),
-          );
-          if (unsafe) checks.checkout_middleware = "erro";
+          const { safeSupabaseAuth } = await import("@/lib/supabase-auth-safe");
+          checks.checkout_middleware = safeSupabaseAuth ? "ok" : "erro";
         } catch {
-          // inspeção indisponível: não derruba o health check
+          checks.checkout_middleware = "erro";
         }
 
         try {

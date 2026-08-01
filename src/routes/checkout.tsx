@@ -41,6 +41,7 @@ import {
   getPaymentConfig,
   getPaymentStatus,
 } from "@/lib/payments.functions";
+import { callSafe } from "@/lib/server-call";
 import {
   createEventId,
   persistPurchaseEventId,
